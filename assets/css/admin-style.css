@@ -1,0 +1,140 @@
+.modal {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.modal.is-visible,
+.modal.show {
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: hsla(0, 0%, 0%, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.3s, opacity 0.3s;
+}
+
+.modal.show .modal-transition,
+.modal.show .modal-overlay,
+.modal.is-visible .modal-overlay {
+    opacity: 1 !important;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal-content > div > div {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    font-size: 16px;
+    text-align: left;
+    padding: 10px;
+}
+
+.modal-content > div > div h3 {
+    margin: 0;
+    font-size: inherit;
+    min-width: 250px;
+}
+
+.modal-content > div > div:nth-child(odd) {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.modal-wrapper {
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    max-width: 740px;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 1.5em hsla(0, 0%, 0%, 0.35);
+    transform: translate(-50%, -50%) !important;
+}
+
+.modal-transition {
+    transition: all 0.3s 0.12s;
+    transform: translateY(-10%);
+    opacity: 0;
+}
+
+.modal.is-visible .modal-transition {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-header,
+.modal-content {
+    padding: 1em;
+}
+
+.modal-header {
+    position: relative;
+    background-color: #fff;
+    box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.06);
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1em;
+    color: #aaa;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #777;
+}
+
+.modal-content {
+    overflow-x: auto;
+    padding: 40px;
+    max-height: 600px;
+    overflow-y: auto;
+    margin-bottom: 40px;
+}
+.modal-heading {
+    font-size: 1.125em;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.modal-content > *:first-child {
+    margin-top: 0;
+}
+
+.modal-content > *:last-child {
+    margin-bottom: 0;
+}
+
+/*  */
+/* form#art-search-form {
+    overflow-x: auto;
+}
+
+form#art-search-form table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    table-layout: auto;
+} */
