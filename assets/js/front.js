@@ -202,7 +202,7 @@ $(document).ready(function () {
 //         var email = $("input[name='email']").val()
 //         var phone = $("input[name='phone']").val()
 //         var pass = $("input[name='pass']").val()
-//         var confirmPass = $("input[name='confirm-pass']").val()
+//         var confirmPass = $("input[name='confirm']").val()
 
 //         var present_addr = $("textarea[name='present-addr']").val()
 //         var permanentAddr = $("textarea[name='permanent-addr']").val()

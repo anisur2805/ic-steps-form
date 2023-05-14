@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: IC Steps Form
- * Description: Simple steps form
+ * Description: Simple multi-steps form
  * Plugin URI:  #
- * Version:     1.0
- * Author:      #
- * Author URI:  #
+ * Version:     1.1
+ * Author:      Itclan BD
+ * Author URI:  https://itclanbd.com/
  * Text Domain: icsf-steps-form
  * License:     GPL v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -15,11 +15,10 @@
 if ( !defined( 'ABSPATH' ) ) {
  exit;
 }
-
-// session_start();
+ session_start();
 
 if ( !defined( 'ICSF_VERSION' ) ) {
- define( 'ICSF_VERSION', '1.0.0' );
+ define( 'ICSF_VERSION', '1.1' );
 }
 
 /**
@@ -33,6 +32,7 @@ define( 'ICSF_DIR', __DIR__ );
 require ICSF_DIR . '/inc/functions.php';
 require ICSF_DIR . '/inc/create-db.php';
 require ICSF_DIR . '/inc/Menu.php';
+require ICSF_DIR . '/inc/Sub-menu.php';
 require ICSF_DIR . '/inc/Subscribers_List_Table.php';
 require ICSF_DIR . '/inc/enqueue.php';
 

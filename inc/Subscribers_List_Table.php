@@ -105,16 +105,25 @@ class Subscribers_List_Table extends \WP_List_Table {
 
     public function column_view( $item ) {
         return sprintf(
-            '<button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>',
+            '<button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>
+            <button type="button" class="icsf-delete-user" data-delete-id="%s"> Delete User</button>',
             esc_attr( $item['user_id'] ),
+            esc_attr( $item['user_id'] )
+            ,
         );
     }
 
     public function column_status( $item ) {
+        $status = $item['status'] == 0 ? 'Unpaid' : 'Paid';
+        $status_class = $item['status'] == 1 ? 'success' : '';
+        $disabled = $item['status'] == 1 ? 'disabled' : '';
         return sprintf(
-            "Unpaid",
+            '<span class="'.$status_class.'">'.$status.'</span> <button %s type="button" class="icsf-update-user" data-update-id="%s"> Update Status</button>',
+            $disabled,
+            esc_attr( $item['user_id'] )
         );
     }
+    
 
     public function column_photo( $item ) {
         return sprintf(

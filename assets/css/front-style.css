@@ -349,6 +349,15 @@
     color: #6d7c90;
 }
 
+.ic-membership-form .ic-form input::-webkit-outer-spin-button,
+.ic-membership-form .ic-form input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+} 
+
+.ic-membership-form .ic-form input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .ic-membership-form .ic-form .error .form-control {
     border-color: #f00;
 }

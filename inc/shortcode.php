@@ -5,7 +5,7 @@
     $email = fieldCheck( 'email' );
     $phone = fieldCheck( 'phone' );
     $password = fieldCheck( 'pass' );
-    $cpassword = fieldCheck( 'confirm-pass' );
+    $cpassword = fieldCheck( 'confirm' );
     $presentAddr = fieldCheck( 'present-addr' );
     $permanentAddr = fieldCheck( 'permanent-addr' );
     $nid = fieldCheck( 'nid-no' );
@@ -91,19 +91,19 @@
                             <!-- Phone Number -->
                             <div class="col-lg-6 mb-25">
                                 <label class="form-label">Phone Number</label>
-                                <input name="phone" type="number" value="<?php echo $phone; ?>" class="form-control required"
+                                <input name="phone" type="number" minlength="10" maxlength="14" value="<?php echo $phone; ?>" class="form-control required"
                                     placeholder="Enter your phone number">
                             </div>
                             <!-- Password -->
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">Password</label>
-                                <input name="pass"  value="<?php echo $password; ?>" type="password" class="form-control required" placeholder="Password">
+                                <input name="pass" id="password" value="<?php echo $password; ?>" type="password" class="form-control required" placeholder="Password">
                             </div>
                             <!-- Confirm password -->
                             <div class="col-lg-6 ">
-                                <label for="" class="form-label">Confirm
+                                <label for="confirm" class="form-label">Confirm
                                     Password</label>
-                                <input name="confirm-pass" value="<?php echo $cpassword; ?>" type="password" class="form-control required"
+                                <input id="confirm" name="confirm" value="<?php echo $cpassword; ?>" type="password" class="form-control required"
                                     placeholder="Confirm password">
                             </div>
                         </div>
@@ -124,7 +124,7 @@
 
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">NID No</label>
-                                <input type="text" name="nid-no" value="<?php echo $nid; ?>" class="form-control required" placeholder="NID No"></input>
+                                <input type="number" name="nid-no" minlength="10" maxlength="17" value="<?php echo $nid; ?>" class="form-control required" placeholder="NID No"></input>
                             </div>
 
                             <div class="col-lg-6 mb-25">
@@ -163,7 +163,7 @@
 
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">Business Phone</label>
-                                <input name="business-phone" type="text" value="<?php echo $businessPhone; ?>" class="form-control required"
+                                <input name="business-phone" minlength="10" maxlength="14" type="number" value="<?php echo $businessPhone; ?>" class="form-control required"
                                     placeholder="Business Phone">
                             </div>
 

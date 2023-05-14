@@ -1,10 +1,9 @@
 <?php
-
 function ic_members_activate() {
     global $wpdb;
 
-    $charset_collate = $wpdb->get_charset_collate();
-    $ic_members_table           = $wpdb->prefix . 'ic_members';
+    $charset_collate  = $wpdb->get_charset_collate();
+    $ic_members_table = $wpdb->prefix . 'ic_members';
 
     $table_schema = "CREATE TABLE IF NOT EXISTS $ic_members_table (
         `id` int NOT NULL AUTO_INCREMENT,

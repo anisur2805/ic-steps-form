@@ -107,7 +107,7 @@
 .modal-content {
     overflow-x: auto;
     padding: 40px;
-    max-height: 600px;
+    max-height: 400px;
     overflow-y: auto;
     margin-bottom: 40px;
 }
@@ -138,3 +138,26 @@ form#art-search-form table {
     background-color: transparent;
     table-layout: auto;
 } */
+
+table.table-view-list.subscribers .column-view {
+    width: 190px;
+}
+table.table-view-list.subscribers td span {
+    display: block;
+}
+
+table.table-view-list.subscribers td span {
+    display: block;
+    font-weight: 500;
+}
+
+table.table-view-list.subscribers td span.success {
+    color: green;
+}
+
+table.table-view-list.subscribers td button {
+    cursor: pointer;
+}
+table.table-view-list.subscribers .icsf-delete-user {
+    color: #f00;
+}
