@@ -288,18 +288,18 @@
     line-height: 10px;
     background: #ddd;
     border-radius: 4px;
-    display: block;
+    /* display: block; */
     margin: 0 auto 10px;
     width: fit-content;
 }
 
-.show-reg-msg.error-reg-msg {
+/* .show-reg-msg.error-reg-msg {
     color: #f00;
 }
 
 .show-reg-msg.success-reg-msg {
     color: #113f13;
-}
+} */
 .condition {
     display: none;
 }
@@ -361,6 +361,50 @@
 .ic-membership-form .ic-form .error .form-control {
     border-color: #f00;
 }
+
+
+
+
+
+.show-reg-msg {
+    top: 90px;
+    z-index: 9999999;
+    visibility: hidden;
+    text-align: center;
+    padding: 16px;
+    position: fixed;
+    right: 5px;
+    font-size: 17px;
+    border-radius: 6px;
+}
+
+.show-reg-msg.success-reg-msg {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    background-color: #408d30;
+    color: #fff;
+  }
+
+.show-reg-msg.error-reg-msg {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  background-color: #f00;
+  color: #fff;
+}
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0;opacity: 0;}
+  to {top: 30px;opacity: 1;}
+}
+
+
 
 @media (max-width: 1199px) {
     .ic-membership-form .ic-form .form-control, .ic-membership-form .ic-form .form-select {

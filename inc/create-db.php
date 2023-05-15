@@ -4,6 +4,8 @@ function ic_members_activate() {
 
     $charset_collate  = $wpdb->get_charset_collate();
     $ic_members_table = $wpdb->prefix . 'ic_members';
+    $ic_status_table  = $wpdb->prefix . 'ic_user_status';
+
 
     $table_schema = "CREATE TABLE IF NOT EXISTS $ic_members_table (
         `id` int NOT NULL AUTO_INCREMENT,
@@ -49,8 +51,36 @@ function ic_members_activate() {
         PRIMARY KEY (`id`)
   ) $charset_collate";
 
+
+    $table_schema = "CREATE TABLE IF NOT EXISTS $ic_status_table (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `status` varchar(255) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) $charset_collate";
+
     if ( ! function_exists( 'dbDelta' ) ) {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     }
     dbDelta( $table_schema );
 }
+
+// Create a table named `ic_user_status`
+function ic_user_status() {
+    global $wpdb;
+
+    $charset_collate  = $wpdb->get_charset_collate();
+    $ic_status_table = $wpdb->prefix . 'ic_user_status';
+
+    $table_schema = "CREATE TABLE IF NOT EXISTS $ic_status_table (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `status` varchar(255) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) $charset_collate";
+
+    if ( ! function_exists( 'dbDelta' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    }
+    dbDelta( $table_schema );
+}
+
+

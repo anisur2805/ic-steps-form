@@ -161,6 +161,10 @@ function ic_register_user() {
 
         $email    = sanitize_email( $_POST['email'] );
         $password = sanitize_text_field( $_POST['pass'] );
+        $name     = sanitize_text_field( $_POST['name'] );
+		$username     = sanitize_text_field( $_POST['user-name'] );
+		$business_name     = sanitize_text_field( $_POST['business-name'] );
+		$phone     = sanitize_text_field( $_POST['phone'] );
 
         $user_id = username_exists( $email );
 
@@ -175,16 +179,49 @@ function ic_register_user() {
             $get_message         = get_option('user_message');
             $get_message_subject = get_option('user_message_subject');
 
-            $user_message = ( ! isset( $get_message ) ) ? __( 'Awesome, Thank you for connecting with us, shortly we will get back to you.' ) : $get_message;
+            // $user_message = ( ! isset( $get_message ) ) ? __( 'Awesome, Thank you for connecting with us, shortly we will get back to you.' ) : $get_message;
             $headers      = array( 'Content-Type: text/html; charset=UTF-8' );
-            $user_subject = ( ! isset( $get_message_subject ) ) ? __( 'New User Registration Notification.' ) : $get_message_subject;
+            // $user_subject = ( ! isset( $get_message_subject ) ) ? __( 'New User Registration Notification.' ) : $get_message_subject;
+            $user_subject = 'We received your request';
+            // $user_message = 'Hi ' . $name . ',<br/>
+            // Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request. <br/>            
+            // A member of our team will get back to you shortly. <br/>            
+            // Thank you <br/>
+            // Team FCCL';
+            // wp_mail( $email, $user_subject, $user_message, $headers );
+
+            $user_message = 'Hi ' . $name . ',\n
+            Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request. \n \n \n            
+            A member of our team will get back to you shortly. \n \n \n
+            Thank you \n
+            Team FCCL';
+
             wp_mail( $email, $user_subject, $user_message, $headers );
 
-            // send mail for admin
-            $admin_email   = get_option( 'admin_email' );
-            $message       = 'Someone has been registered successfully';
-            $admin_subject = __( 'Thanks for Registering' );
 
+            // // send mail for admin
+            // $admin_email   = get_option( 'admin_email' );
+            // $message       = 'Someone has been registered successfully';
+            // $admin_subject = __( 'Thanks for Registering' );
+
+            // wp_mail( $admin_email, $admin_subject, $message, $headers );
+
+            // header( "Location: " . add_query_arg( array(
+            //     'registration' => 'success',
+            // ), $_SERVER['REQUEST_URI'] ) );
+
+            // exit;
+
+
+			// Registered time: ;
+            $admin_email   = get_option( 'admin_email' );
+            $message       = "New user has registered to your website <br/>
+			User name: {$username} <br/>
+			Company name: $business_name <br/>
+			Email: $email <br/>
+			Phone no: $phone";
+            // $admin_subject = __( 'Thanks for Registering' );
+            $admin_subject = 'Registered new user: ['.$email.']';
             wp_mail( $admin_email, $admin_subject, $message, $headers );
 
             header( "Location: " . add_query_arg( array(
@@ -192,6 +229,7 @@ function ic_register_user() {
             ), $_SERVER['REQUEST_URI'] ) );
 
             exit;
+
 
         } else {
             // add_query_arg( array(
@@ -362,8 +400,27 @@ function icsf_delete_user() {
     wp_die();
 }
 
+/**
+ * Ajax call for delete user status in list table based on `ID`
+ */
+add_action('wp_ajax_icsf_delete_user_status', 'icsf_delete_user_status');
+add_action('wp_ajax_nopriv_icsf_delete_user_status', 'icsf_delete_user_status');
+function icsf_delete_user_status() {
+    $data_id = sanitize_key( $_POST['data_id'] ); ?>
+            
+    <?php
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'ic_user_status';
+        $wpdb->delete( $table_name, array('id' => $data_id));
+        
+    ?>
 
-// add_action( 'plugins_loaded', 'ic_members_add_status_column' );
+    <?php
+    wp_die();
+}
+
+// Add new status column in database
+add_action( 'plugins_loaded', 'ic_members_add_status_column' );
 function ic_members_add_status_column() {
     global $wpdb;
 
@@ -386,22 +443,35 @@ function ic_members_add_status_column() {
 add_action('wp_ajax_icsf_update_user', 'icsf_update_user');
 add_action('wp_ajax_nopriv_icsf_update_user', 'icsf_update_user');
 function icsf_update_user() {
+
+    // echo '<pre>';
+    //       print_r( $_POST );
+    // echo '</pre>';
     $data_id = sanitize_key( $_POST['data_id'] );
+    $status = sanitize_key( $_POST['status'] );
     
     global $wpdb;
     $table_name = $wpdb->prefix . 'ic_members';
+    $table_status = $wpdb->prefix . 'ic_user_status';
 
     // Update from ic_members table
     $wpdb->update(
         $table_name,
-        array('status' => 1),
+        array('status' => $status),
         array('user_id' => $data_id)
     );
+
+    // $wpdb->update(
+    //     $table_status,
+    //     array('status' => 1),
+    //     array('user_id' => $data_id)
+    // );
         
     wp_send_json_success([
         'status' => __('Paid', 'icsf-steps-form'),
         'user_id' => $data_id,
-        'disabled' => true
+        'disabled' => true,
+        'status' => $status
     ]);
 }
 
@@ -459,4 +529,59 @@ function icsf_user_delete_message() {
         update_option( 'user_delete_message_subject', $message_subject );
         
     }
+}
+
+// handle the form submit for user status
+add_action( 'admin_init', 'icsf_user_status' );
+function icsf_user_status() {
+
+    if (isset($_POST['icsf_status']) && $_POST['icsf_status'] == 1) {
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'ic_user_status' ) ) {
+            wp_die('Invalid nonce. Form submission not allowed.');
+        }
+
+        $status = sanitize_text_field( $_POST['ic_user_status'] );
+        global $wpdb;
+        $status_table = $wpdb->prefix . 'ic_user_status';
+        $wpdb->query(
+            $wpdb->prepare(
+               "INSERT INTO $status_table
+               ( status )
+               VALUES ( %s )",
+               $status,
+            )
+         );
+        
+    }
+}
+
+// Update user status
+add_action( 'admin_init', 'icsf_user_status_update' );
+function icsf_user_status_update() {
+
+    if (isset($_POST['icsf_status_update']) && $_POST['icsf_status_update'] == 1) {
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'ic_user_status_update' ) ) {
+            wp_die('Invalid nonce. Form submission not allowed.');
+        }
+
+        $status = sanitize_text_field( $_POST['ic_user_status_update'] );
+        $id     = sanitize_text_field( $_POST['ic_user_status_update_id'] );
+        global $wpdb;
+        $status_table = $wpdb->prefix . 'ic_user_status';
+
+         $wpdb->update(
+            $status_table,
+            array(
+                'status' => $status,
+            ),
+            array( 'id' => $id ),
+            array(
+                '%s',
+            ),
+            array( '%d' )
+        );
+    }
+
 }

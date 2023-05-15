@@ -26,7 +26,7 @@ function ICSF_frontend_assets() {
  */
 add_action( 'admin_enqueue_scripts', 'ICSF_admin_assets' );
 function ICSF_admin_assets( $hook ) {
- if ( $hook == 'toplevel_page_ic-register-users' ) {
+ if ( $hook == 'toplevel_page_ic-register-users' || $hook == 'ic-members_page_ic-register-user-status' ) {
   wp_enqueue_style( 'icsf-admin-main', ICSF_ASSETS . '/css/admin-style.css', null, ICSF_VERSION, 'all' );
 //   wp_enqueue_script( 'icsf-admin-script', ICSF_ASSETS . '/js/admin.js', ['jquery'], ICSF_VERSION, true );
 
@@ -43,6 +43,12 @@ function ICSF_admin_assets( $hook ) {
    ) );
 
    wp_localize_script( 'icsf-admin-scripts', 'myTableObjUpdate', array(
+    'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+    'nonce'   => wp_create_nonce( 'form-nonce' ),
+    'confirm' => __('Are you sure?', 'icsf'),
+   ) );
+
+   wp_localize_script( 'icsf-admin-scripts', 'myTableStatusDelete', array(
     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
     'nonce'   => wp_create_nonce( 'form-nonce' ),
     'confirm' => __('Are you sure?', 'icsf'),

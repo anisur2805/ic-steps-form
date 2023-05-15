@@ -52,16 +52,20 @@
 			}
             
             var self = $(this);
+            var val = $(this).prev('select').val();
+            console.log( 'hello ', val )
             var spanElement = $(this).prev('span');
             var data = {
                 data_id: $(this).data('update-id'),
                 action: 'icsf_update_user',
+                status: val
             }
             $.post(myTableObjUpdate.ajaxUrl, data, function (response) {
-                spanElement.text( response.data.status )
-                spanElement.addClass('success')
-                self.addClass('disabled')
-                self.prop('disabled',  response.data.disabled );
+                console.log( 'response', response )
+                // spanElement.text( response.data.status )
+                // spanElement.addClass('success')
+                // self.addClass('disabled')
+                // self.prop('disabled',  response.data.disabled );
             }).fail(function (e) {
                 console.log(myTableObjUpdate.error, e)
             });
@@ -79,6 +83,32 @@
         jQuery('body').on('click', '.modal-close', function(e) {
             e.preventDefault();
             jQuery('.modal').removeClass('show');
+        });
+
+        // Ajax call for delete user status based on click `id`
+        $('body').on('click', '.ic-delete-status', function(e){
+            e.preventDefault();
+
+            if ( !confirm( myTableStatusDelete.confirm ) ) {
+                return;
+            }
+
+            var self = $(this);
+            var data = {
+                data_id: $(this).data('delete-id'),
+                action: 'icsf_delete_user_status',
+            }
+            $.post(myTableStatusDelete.ajaxUrl, data, function (response) {
+                self.closest("tr")
+                    .css("background-color", "red")
+                    .hide(400, function () {
+                        $(this).remove();
+                    });
+
+            }).fail(function (e) {
+                console.log(myTableStatusDelete.error, e)
+            });
+
         });
         
     } );

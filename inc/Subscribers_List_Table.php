@@ -24,6 +24,7 @@ class Subscribers_List_Table extends \WP_List_Table {
             'cb'                  => __( '<input type="checkbox" />', 'founders-club' ),
             'name'                => __( '<strong>Name</strong>', 'founders-club' ),
             'email'               => __( '<strong>Email</strong>', 'founders-club' ),
+            // 'created_at'               => __( '<strong>Create Date</strong>', 'founders-club' ),
             'dob'                 => __( '<strong>DOB</strong>', 'founders-club' ),
             'phone'                 => __( '<strong>Mobile No.</strong>', 'founders-club' ),
             'status'              => __( '<strong>Status</strong>', 'founders-club' ),
@@ -96,6 +97,15 @@ class Subscribers_List_Table extends \WP_List_Table {
         return "<input type='checkbox' value='{$item["id"]}'/>";
     }
 
+    public function column_created_at( $item ) {
+        $created_at = $item['created_at'];
+        $created_time = ! empty( $created_at ) ? $created_at : current_time( 'timestamp' );
+        $formatted_date = date( 'Y-m-d H:i:s', $created_time );
+
+        return $formatted_date;
+
+    }
+
     public function column_name( $item ) {
         return sprintf(
             '<strong>%s</strong>',
@@ -106,7 +116,9 @@ class Subscribers_List_Table extends \WP_List_Table {
     public function column_view( $item ) {
         return sprintf(
             '<button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>
+            <button type="button" class="icsf-edit-user" data-id="%s"> Edit User</button>
             <button type="button" class="icsf-delete-user" data-delete-id="%s"> Delete User</button>',
+            esc_attr( $item['user_id'] ),
             esc_attr( $item['user_id'] ),
             esc_attr( $item['user_id'] )
             ,
@@ -117,14 +129,38 @@ class Subscribers_List_Table extends \WP_List_Table {
         $status = $item['status'] == 0 ? 'Unpaid' : 'Paid';
         $status_class = $item['status'] == 1 ? 'success' : '';
         $disabled = $item['status'] == 1 ? 'disabled' : '';
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'ic_user_status';
+        $query = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
+    
+        // $select = '<select class="status-dropdown">';
+        // foreach( $query as $res ) {
+        //     $select .= '<option value="' . $res['id'] . '">' . $res['status'] . '</option>';
+        // }
+        // $select .= '</select>';
+        // <span class="%s">%s</span> 
+
+        // echo '<pre>';
+        //       print_r( $item );
+        // echo '</pre>';
+
+        $select = '<select class="status-dropdown">';
+        foreach ($query as $res) {
+            $selected = ( $res['id'] == $item['status'] ) ? 'selected' : '';
+            $select .= '<option value="' . $res['id'] . '" '.$selected.'>' . $res['status'] . '</option>';
+        }
+        $select .= '</select>';
+        
+
         return sprintf(
-            '<span class="'.$status_class.'">'.$status.'</span> <button %s type="button" class="icsf-update-user" data-update-id="%s"> Update Status</button>',
+            '%s
+            <button %s type="button" class="icsf-update-user" data-update-id="%s"> Update Status</button>',
+            $select,
             $disabled,
             esc_attr( $item['user_id'] )
         );
     }
     
-
     public function column_photo( $item ) {
         return sprintf(
             "<img width='40' height='40' src='%s'/>",

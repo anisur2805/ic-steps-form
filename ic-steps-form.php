@@ -33,6 +33,7 @@ require ICSF_DIR . '/inc/functions.php';
 require ICSF_DIR . '/inc/create-db.php';
 require ICSF_DIR . '/inc/Menu.php';
 require ICSF_DIR . '/inc/Sub-menu.php';
+require ICSF_DIR . '/inc/Status.php';
 require ICSF_DIR . '/inc/Subscribers_List_Table.php';
 require ICSF_DIR . '/inc/enqueue.php';
 
