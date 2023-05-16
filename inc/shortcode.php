@@ -38,6 +38,7 @@
     $third_kids_gender = fieldCheck( 'third-kids-gender' ); 
     $third_kids_name = fieldCheck( 'third-kids-name' );
     $third_kids_dob = fieldCheck( 'third-kids-dob' );
+    $membership_type = fieldCheck( 'membership_type' );
 
 ?>
 <section class="ic-membership-form ic-section-space">
@@ -60,18 +61,18 @@
                         <div class="row">
                             <!-- Full Name -->
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Name</label>
+                                <label for="" class="form-label">Name*</label>
                                 <input name="name" type="text" class="form-control required" value="<?php echo $name; ?>" placeholder="Enter your full name">
                             </div>
                             <!-- User Name -->
                             <?php  if ( isset( $_GET['registration'] ) && $_GET['registration'] == 'failed' ) { ?>
                                 <div class="col-lg-6 mb-25 error">
-                                    <label for="" class="form-label">User Name</label>
+                                    <label for="" class="form-label">User Name*</label>
                                     <input name="user-name" value="<?php echo $user_name; ?>" type="text" class="form-control required" placeholder="Enter User Name">
                                 </div>
                             <?php } else { ?>
                                 <div class="col-lg-6 mb-25">
-                                    <label for="" class="form-label">User Name</label>
+                                    <label for="" class="form-label">User Name*</label>
                                     <input name="user-name" value="<?php echo $user_name; ?>" type="text" class="form-control required" placeholder="Enter User Name">
                                 </div>
                             <?php } ?>
@@ -79,30 +80,29 @@
                             <!-- Email Address -->
                             <?php  if ( isset( $_GET['registration'] ) && $_GET['registration'] == 'failed' ) { ?>
                                 <div class="col-lg-6 mb-25 error">
-                                    <label class="form-label">Email Address</label>
+                                    <label class="form-label">Email Address*</label>
                                     <input name="email" type="email" value="<?php echo $email; ?>" class="form-control required error" placeholder="Enter your email address" />
                                 </div>
                             <?php } else { ?>
                                 <div class="col-lg-6 mb-25">
-                                    <label class="form-label">Email Address</label>
+                                    <label class="form-label">Email Address*</label>
                                     <input name="email" type="email" value="<?php echo $email; ?>" class="form-control required error" placeholder="Enter your email address" />
                                 </div>
                             <?php } ?>
                             <!-- Phone Number -->
                             <div class="col-lg-6 mb-25">
-                                <label class="form-label">Phone Number</label>
+                                <label class="form-label">Phone Number*</label>
                                 <input name="phone" type="number" minlength="10" maxlength="14" value="<?php echo $phone; ?>" class="form-control required"
                                     placeholder="Enter your phone number">
                             </div>
                             <!-- Password -->
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Password</label>
+                                <label for="" class="form-label">Password*</label>
                                 <input name="pass" id="password" value="<?php echo $password; ?>" type="password" class="form-control required" placeholder="Password">
                             </div>
                             <!-- Confirm password -->
                             <div class="col-lg-6 ">
-                                <label for="confirm" class="form-label">Confirm
-                                    Password</label>
+                                <label for="confirm" class="form-label">Confirm Password*</label>
                                 <input id="confirm" name="confirm" value="<?php echo $cpassword; ?>" type="password" class="form-control required"
                                     placeholder="Confirm password">
                             </div>
@@ -114,21 +114,21 @@
                     <section class="mb-30">
                         <div class="row ">
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Present Address</label>
+                                <label for="" class="form-label">Present Address*</label>
                                 <textarea name="present-addr" class="form-control required" placeholder="Present Address"><?php echo $presentAddr; ?></textarea>
                             </div>
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Permanent Address</label>
+                                <label for="" class="form-label">Permanent Address*</label>
                                 <textarea name="permanent-addr" class="form-control required" placeholder="Permanent Address"><?php echo $permanentAddr; ?></textarea>
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">NID No</label>
+                                <label for="" class="form-label">NID No*</label>
                                 <input type="number" name="nid-no" minlength="10" maxlength="17" value="<?php echo $nid; ?>" class="form-control required" placeholder="NID No"></input>
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Facebook URL</label>
+                                <label for="" class="form-label">Facebook URL*</label>
                                 <input type="text" name="fburl" class="form-control required" value="<?php echo $fburl; ?>" placeholder="https:facebook.com"></input>
                             </div>
 
@@ -139,36 +139,34 @@
 
                             <!-- Date of Birth -->
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Date of Birth</label>
+                                <label for="" class="form-label">Date of Birth*</label>
                                 <input name="date" type="date" class="form-control required" value="<?php echo $date; ?>" placeholder="dd/mm/yy">
                             </div>
                             <!-- Company Name -->
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Business Name</label>
+                                <label for="" class="form-label">Business Name*</label>
                                 <input name="business-name" type="text" value="<?php echo $businessName; ?>" class="form-control required"
                                     placeholder="Business Name">
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Position in you Business</label>
+                                <label for="" class="form-label">Position in you Business*</label>
                                 <input name="position-name" type="text" value="<?php echo $positionName; ?>" class="form-control required"
                                     placeholder="Position in you Business">
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Business Email</label>
-                                <input name="business-email" type="text" value="<?php echo $businessEmail; ?>" class="form-control required"
-                                    placeholder="business@email.com">
+                                <label for="" class="form-label">Business Email*</label>
+                                <input name="business-email" type="text" value="<?php echo $businessEmail; ?>" class="form-control required" placeholder="business@email.com">
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Business Phone</label>
-                                <input name="business-phone" minlength="10" maxlength="14" type="number" value="<?php echo $businessPhone; ?>" class="form-control required"
-                                    placeholder="Business Phone">
+                                <label for="" class="form-label">Business Phone*</label>
+                                <input name="business-phone" minlength="10" maxlength="14" type="number" value="<?php echo $businessPhone; ?>" class="form-control required" placeholder="Business Phone">
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Business URL</label>
+                                <label for="" class="form-label">Business URL*</label>
                                 <input name="url" type="text" value="<?php echo $url; ?>" class="form-control required"
                                     placeholder="Business URL">
                             </div>
@@ -236,17 +234,17 @@
                     <section class="mb-30">
                         <div class="row ">
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Father's Name</label>
+                                <label for="" class="form-label">Father's Name*</label>
                                 <textarea name="father-name" class="form-control required" placeholder="Father's Name"><?php echo $father; ?></textarea>
                             </div>
 
                             <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Mother's Name</label>
+                                <label for="" class="form-label">Mother's Name*</label>
                                 <textarea name="mother-name" class="form-control required" placeholder="Mother's Name"><?php echo $mother; ?></textarea>
                             </div>
 
                             <div class="col-lg-6 mb-25 is-married-col">
-                                <label for="" class="form-label">Marital Status</label>
+                                <label for="" class="form-label">Marital Status*</label>
                                 <select name="isMarried" class="form-select required" aria-label="Default select example">
                                     <option value="0" <?php echo ($married == '0') ? 'selected' : ''; ?>>Choose Options</option>
                                     <option value="1" <?php echo ($married == '1') ? 'selected' : ''; ?>>Yes</option>
@@ -518,6 +516,18 @@
                     <h6></h6>
                     <section class="mb-30">
                         <div class="ic-file-upload-wrapper">
+                        <div class="col-lg-6 mb-25">
+                                <label for="membership_type" class="form-label">Membership Type*</label>
+                                <select name="membership_type" id="membership_type" class="form-select required" aria-label="Default select example">
+                                    <option value="0">Choose Type</option>
+                                    <option value="ec-members" <?php echo ($membership_type == 'ec-members') ? 'selected' : ''; ?>>EC Members</option>
+                                    <option value="general-members" <?php echo ($membership_type == 'general-members') ? 'selected' : ''; ?>>General Members</option>
+                                    <option value="founding-members" <?php echo ($membership_type == 'founding-members') ? 'selected' : ''; ?>>Founding Members</option>
+                                    <option value="lifetime-members" <?php echo ($membership_type == 'lifetime-members') ? 'selected' : ''; ?>>Lifetime Members</option>
+                                </select>
+                            </div>
+
+
                             <div class="ic-file-upload-item">
                                 <h6 class="cl-pm fw-500 mb-15">Applicant's photo</h6>
                                 <input type="file" name="photo" accept="image/png, image/gif, image/jpeg, image/jpg">

@@ -3,6 +3,7 @@
 function icsf_formHandler( $user_id ) {
 
     if ( isset( $_POST['submit'] ) ) {
+
         $name                           = sanitize_text_field( $_POST['name'] );
         $email                          = sanitize_text_field( $_POST['email'] );
         $userName                       = sanitize_text_field( $_POST['user-name'] );
@@ -37,6 +38,7 @@ function icsf_formHandler( $user_id ) {
         $third_child_name   = sanitize_text_field( $_POST['third-kids-name'] );
         $third_child_dob    = sanitize_text_field( $_POST['third-kids-dob'] );
         $third_child_gender = sanitize_text_field( $_POST['third-kids-gender'] );
+        $membership_type = sanitize_text_field( $_POST['membership_type'] );
 
         $photo = ic_upload_file( 'photo' );
         $nid   = ic_upload_file( 'nid' );
@@ -66,6 +68,7 @@ function icsf_formHandler( $user_id ) {
                 'present_addr'                   => $presentAddr,
                 'permanent_addr'                 => $permanentAddr,
                 'nid_no'                         => $nidNo,
+                'created_at'                     => current_time( 'mysql' ),
                 'fb_url'                         => $fb_url,
                 'linkedin_url'                   => $linkedin_url,
                 'dob'                            => $dob,
@@ -90,12 +93,15 @@ function icsf_formHandler( $user_id ) {
                 'third_child_name'               => $third_child_name,
                 'third_child_dob'                => $third_child_dob,
                 'third_child_gender'             => $third_child_gender,
+                'membership_type'                => $membership_type,
                 'photo'                          => $photo,
                 'nid'                            => $nid,
                 'trade_license'                  => $trade,
                 'cv'                             => $cv,
             ],
             [
+                '%s',
+                '%s',
                 '%s',
                 '%s',
                 '%s',
@@ -159,14 +165,13 @@ function ic_register_user() {
             ] );
         }
 
-        $email    = sanitize_email( $_POST['email'] );
-        $password = sanitize_text_field( $_POST['pass'] );
-        $name     = sanitize_text_field( $_POST['name'] );
-		$username     = sanitize_text_field( $_POST['user-name'] );
-		$business_name     = sanitize_text_field( $_POST['business-name'] );
-		$phone     = sanitize_text_field( $_POST['phone'] );
-
-        $user_id = username_exists( $email );
+        $email              = sanitize_email( $_POST['email'] );
+        $password           = sanitize_text_field( $_POST['pass'] );
+        $name               = sanitize_text_field( $_POST['name'] );
+		$username           = sanitize_text_field( $_POST['user-name'] );
+		$business_name      = sanitize_text_field( $_POST['business-name'] );
+		$phone              = sanitize_text_field( $_POST['phone'] );
+        $user_id            = username_exists( $email );
 
         if ( ! $user_id && false == email_exists( $email ) ) {
             $user_id = wp_create_user( $email, $password, $email );
@@ -425,13 +430,15 @@ function ic_members_add_status_column() {
     global $wpdb;
 
     $current_version = ICSF_VERSION;
-    $next_version = '1.3';
+    $next_version = '1.5';
     $ic_members_table = $wpdb->prefix . 'ic_members';
 
     $installed_version = get_option('ic_members_version');
 
     if ($installed_version != $next_version) {
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN status varchar(5) DEFAULT NULL");
+        $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN created_at DATETIME NOT NULL");
+        $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN membership_type varchar(50) DEFAULT NULL");
 
         update_option('ic_members_version', $next_version);
     }
