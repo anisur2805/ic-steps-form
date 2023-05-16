@@ -170,8 +170,21 @@ table.table-view-list.subscribers td select {
     margin-bottom: 5px;
     border-radius: 4px;
     color: #000;
+    display: inline-block;
 }
 table.table-view-list.subscribers td select {
     padding-top: 0;
     padding-bottom: 0;
+    padding-right: 25px;
+}
+
+table.table-view-list.subscribers td.photo a {
+    display: block;
+    text-align: center;
+}
+
+table.table-view-list.subscribers td.photo img {
+    display: block;
+    text-align: center;
+    margin: 0 auto 5px;
 }

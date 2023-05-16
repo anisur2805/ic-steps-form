@@ -38,7 +38,8 @@ function icsf_formHandler( $user_id ) {
         $third_child_name   = sanitize_text_field( $_POST['third-kids-name'] );
         $third_child_dob    = sanitize_text_field( $_POST['third-kids-dob'] );
         $third_child_gender = sanitize_text_field( $_POST['third-kids-gender'] );
-        $membership_type = sanitize_text_field( $_POST['membership_type'] );
+        $membership_type    = sanitize_text_field( $_POST['membership_type'] );
+        $refer_by           = sanitize_text_field( $_POST['refer_by'] );
 
         $photo = ic_upload_file( 'photo' );
         $nid   = ic_upload_file( 'nid' );
@@ -98,8 +99,10 @@ function icsf_formHandler( $user_id ) {
                 'nid'                            => $nid,
                 'trade_license'                  => $trade,
                 'cv'                             => $cv,
+                'refer_by'                       => $refer_by,
             ],
             [
+                '%s',
                 '%s',
                 '%s',
                 '%s',
@@ -166,6 +169,7 @@ function ic_register_user() {
         }
 
         $email              = sanitize_email( $_POST['email'] );
+        $url                = sanitize_text_field( $_POST['url'] );
         $password           = sanitize_text_field( $_POST['pass'] );
         $name               = sanitize_text_field( $_POST['name'] );
 		$username           = sanitize_text_field( $_POST['user-name'] );
@@ -177,64 +181,38 @@ function ic_register_user() {
             $user_id = wp_create_user( $email, $password, $email );
 
             // send mail for user
-            // $user_message = __( 'Thanks for register, we will back to you ASAP');
-            $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-            // wp_mail( $email, $user_message, $headers );
-
+            $headers             = array( 'Content-Type: text/html; charset=UTF-8' );
             $get_message         = get_option('user_message');
             $get_message_subject = get_option('user_message_subject');
 
-            // $user_message = ( ! isset( $get_message ) ) ? __( 'Awesome, Thank you for connecting with us, shortly we will get back to you.' ) : $get_message;
-            $headers      = array( 'Content-Type: text/html; charset=UTF-8' );
-            // $user_subject = ( ! isset( $get_message_subject ) ) ? __( 'New User Registration Notification.' ) : $get_message_subject;
-            $user_subject = 'We received your request';
-            // $user_message = 'Hi ' . $name . ',<br/>
-            // Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request. <br/>            
-            // A member of our team will get back to you shortly. <br/>            
-            // Thank you <br/>
-            // Team FCCL';
-            // wp_mail( $email, $user_subject, $user_message, $headers );
+            $get_admin_message_subject   = get_option('ic_admin_message_subject');
+            $get_admin_message           = get_option('ic_admin_message');
 
-            $user_message = 'Hi ' . $name . ',\n
-            Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request. \n \n \n            
-            A member of our team will get back to you shortly. \n \n \n
-            Thank you \n
-            Team FCCL';
+            $updated_message = str_replace("[full_name]", $name, $get_message);
 
-            wp_mail( $email, $user_subject, $user_message, $headers );
+            // user email
+            wp_mail( $email, $get_message_subject, $updated_message, $headers );
 
+			// admin email
+            $admin_updated_message_subject = str_replace("[Email]", $email, $get_admin_message_subject);
+            $admin_email    = get_option( 'admin_email' );
 
-            // // send mail for admin
-            // $admin_email   = get_option( 'admin_email' );
-            // $message       = 'Someone has been registered successfully';
-            // $admin_subject = __( 'Thanks for Registering' );
-
-            // wp_mail( $admin_email, $admin_subject, $message, $headers );
-
-            // header( "Location: " . add_query_arg( array(
-            //     'registration' => 'success',
-            // ), $_SERVER['REQUEST_URI'] ) );
-
-            // exit;
-
-
-			// Registered time: ;
-            $admin_email   = get_option( 'admin_email' );
-            $message       = "New user has registered to your website <br/>
-			User name: {$username} <br/>
-			Company name: $business_name <br/>
-			Email: $email <br/>
-			Phone no: $phone";
-            // $admin_subject = __( 'Thanks for Registering' );
-            $admin_subject = 'Registered new user: ['.$email.']';
-            wp_mail( $admin_email, $admin_subject, $message, $headers );
+            $replace_shortcode = [
+                "[url]"           => $url,
+                "[username]"      => $username,
+                "[company_name]"  => $business_name,
+                "[Phone]"         => $phone,
+                "[Email]"         => $email,
+                "[Time]"          => date("Y/m/d"),
+            ];
+            $get_admin_message = strtr( $get_admin_message, $replace_shortcode );
+            wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
 
             header( "Location: " . add_query_arg( array(
                 'registration' => 'success',
             ), $_SERVER['REQUEST_URI'] ) );
 
             exit;
-
 
         } else {
             // add_query_arg( array(
@@ -430,7 +408,7 @@ function ic_members_add_status_column() {
     global $wpdb;
 
     $current_version = ICSF_VERSION;
-    $next_version = '1.5';
+    $next_version = '1.6';
     $ic_members_table = $wpdb->prefix . 'ic_members';
 
     $installed_version = get_option('ic_members_version');
@@ -439,6 +417,7 @@ function ic_members_add_status_column() {
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN status varchar(5) DEFAULT NULL");
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN created_at DATETIME NOT NULL");
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN membership_type varchar(50) DEFAULT NULL");
+        $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN refer_by varchar(255) DEFAULT NULL");
 
         update_option('ic_members_version', $next_version);
     }
@@ -511,9 +490,19 @@ function icsf_user_message() {
         }
 
         $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] );
-        $message = sanitize_textarea_field( $_POST['ic_user_message'] );
+        $message         = $_POST['ic_user_message'];
 
-        update_option( 'user_message', $message );
+        $allowed_html = [
+            'a' => [
+                'id' => true,
+                'href'  => true,
+                'title' => true,
+            ],
+            'strong' => [],
+        ]; 
+        $clear_message = wp_kses_post( $message, $allowed_html );
+
+        update_option( 'user_message', $clear_message );
         update_option( 'user_message_subject', $message_subject );
         
     }
@@ -530,9 +519,19 @@ function icsf_admin_action() {
         }
 
         $subject = sanitize_text_field( $_POST['ic_admin_message_subject'] );
-        $message = sanitize_textarea_field( $_POST['ic_admin_message'] );
+        $message = $_POST['ic_admin_message'];
 
-        update_option( 'ic_admin_message', $message );
+        $allowed_html = [
+            'a' => [
+                'id' => true,
+                'href'  => true,
+                'title' => true,
+            ],
+            'strong' => [],
+        ]; 
+        $clear_message = wp_kses_post( $message, $allowed_html );
+
+        update_option( 'ic_admin_message', $clear_message );
         update_option( 'ic_admin_message_subject', $subject );
         
     }
@@ -549,11 +548,21 @@ function icsf_confirm_action() {
         }
 
         $subject = sanitize_text_field( $_POST['get_confirm_message_subject'] );
-        $message = sanitize_textarea_field( $_POST['get_confirm_message'] );
+        // $message = sanitize_textarea_field( $_POST['get_confirm_message'] );
+        $message = $_POST['get_confirm_message'];
 
-        update_option( 'get_confirm_message', $message );
+        $allowed_html = [
+            'a' => [
+                'id' => true,
+                'href'  => true,
+                'title' => true,
+            ],
+            'strong' => [],
+        ]; 
+        $clear_message = wp_kses_post( $message, $allowed_html );
+
+        update_option( 'get_confirm_message', $clear_message );
         update_option( 'get_confirm_message_subject', $subject );
-        
     }
 }
 
@@ -568,9 +577,19 @@ function icsf_reject_action() {
         }
 
         $subject = sanitize_text_field( $_POST['ic_user_reject_message_subject'] );
-        $message = sanitize_textarea_field( $_POST['ic_user_reject_message'] );
+        $message = $_POST['ic_user_reject_message'];
 
-        update_option( 'ic_user_reject_message', $message );
+        $allowed_html = [
+            'a' => [
+                'id' => true,
+                'href'  => true,
+                'title' => true,
+            ],
+            'strong' => [],
+        ]; 
+        $clear_message = wp_kses_post( $message, $allowed_html );
+
+        update_option( 'ic_user_reject_message', $clear_message );
         update_option( 'ic_user_reject_message_subject', $subject );
         
     }
@@ -587,9 +606,19 @@ function icsf_user_delete_message() {
         }
 
         $message_subject = sanitize_text_field( $_POST['ic_user_delete_message_subject'] );
-        $message = sanitize_textarea_field( $_POST['ic_user_delete_message'] );
+        $message         = $_POST['ic_user_delete_message'];
 
-        update_option( 'user_delete_message', $message );
+        $allowed_html = [
+            'a' => [
+                'id' => true,
+                'href'  => true,
+                'title' => true,
+            ],
+            'strong' => [],
+        ]; 
+        $clear_message = wp_kses_post( $message, $allowed_html );
+
+        update_option( 'user_delete_message', $clear_message );
         update_option( 'user_delete_message_subject', $message_subject );
         
     }
@@ -661,29 +690,27 @@ function icsf_confirm_email_send() {
     $user_email = sanitize_key( $_POST['data_email'] );
     
     global $wpdb;
-    $table_name     = $wpdb->prefix . 'ic_members';
-    $table_status   = $wpdb->prefix . 'ic_user_status';
-    $user_subject   = '';
+    // $table_name     = $wpdb->prefix . 'ic_members';
+    // $table_status   = $wpdb->prefix . 'ic_user_status';
     $headers        = array( 'Content-Type: text/html; charset=UTF-8' );
-    $name           = '';
-    $user_message = <<<EOD
-We received your request
+    $get_confirm_message         = get_option('get_confirm_message');
+    $get_confirm_message_subject = get_option('get_confirm_message_subject');
 
-Hi $name,
+    $allowed_html = [
+        'a' => [
+            'id' => true,
+            'href'  => true,
+            'title' => true,
+        ],
+        'strong' => [],
+    ];
+    $clear_post = wp_kses( $get_confirm_message, $allowed_html );
 
-Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request.
-
-A member of our team will get back to you shortly.
-
-Thank you,
-Team FCCL
-EOD;
-
-    wp_mail( $user_email, $user_subject, $user_message, $headers );
-        
+    wp_mail( $user_email, $get_confirm_message_subject, $clear_post, $headers );
     wp_send_json_success([
         'is_emailed'   => true,
-        'message_body' => $user_message
+        'subject' => $get_confirm_message_subject,
+        'message_body' => $clear_post,
     ]);
 }
 
@@ -699,29 +726,29 @@ function icsf_reject_email_send() {
     $data_id    = sanitize_key( $_POST['data_id'] );
     $user_email = sanitize_key( $_POST['data_email'] );
     
-    global $wpdb;
-    $table_name     = $wpdb->prefix . 'ic_members';
-    $table_status   = $wpdb->prefix . 'ic_user_status';
-    $user_subject   = '';
+    // global $wpdb;
+    // $table_name     = $wpdb->prefix . 'ic_members';
+    // $table_status   = $wpdb->prefix . 'ic_user_status';
+
     $headers        = array( 'Content-Type: text/html; charset=UTF-8' );
-    $name           = '';
-    $user_message = <<<EOD
-We received your request
+    $user_reject_subject   = get_option( 'ic_user_reject_message' );
+    $user_reject_message   = get_option( 'ic_user_reject_message_subject' );
 
-Hi $name,
+    $allowed_html = [
+        'a' => [
+            'id'    => true,
+            'href'  => true,
+            'title' => true,
+        ],
+        'strong' => [],
+    ]; 
+    $clear_message = wp_kses_post( $user_reject_message, $allowed_html );
 
-Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request.
-
-A member of our team will get back to you shortly.
-
-Thank you,
-Team FCCL
-EOD;
-
-    wp_mail( $user_email, $user_subject, $user_message, $headers );
+    wp_mail( $user_email, $user_reject_subject, $clear_message, $headers );
         
     wp_send_json_success([
         'is_emailed'   => true,
-        'message_body' => $user_message
+        'message_header' => $user_reject_subject,
+        'message_body' => $user_reject_message,
     ]);
 }

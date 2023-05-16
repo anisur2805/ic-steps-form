@@ -83,7 +83,10 @@
             }
             $.post(confirmEmailSendObj.ajaxUrl, data, function (response) {
                 console.log( 'response', response )
-
+                $('wrap h1').append(
+                    response.data.message_body
+                )
+                console.log( response.data.message_body )
             }).fail(function (e) {
                 console.log(confirmEmailSendObj.error, e)
             });

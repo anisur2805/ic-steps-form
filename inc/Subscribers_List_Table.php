@@ -41,7 +41,7 @@ class Subscribers_List_Table extends \WP_List_Table {
      */
     public function prepare_items() {
 
-        $per_page     = 30;
+        $per_page     = 20;
         $total_items  = count( $this->_items );
         $current_page = $this->get_pagenum();
         $this->set_pagination_args( [
@@ -118,20 +118,27 @@ class Subscribers_List_Table extends \WP_List_Table {
     }
 
     public function column_view( $item ) {
+        // echo '<pre>';
+        //       print_r( $item );
+        // echo '</pre>';
         // <button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>
         return sprintf(
             '<button type="button" class="icsf-send-confirm-email" data-id="%s" data-email="%s">Confirm Email</button>
             <button type="button" class="icsf-send-reject-email" data-id="%s" data-email="%s">Reject Email</button>
             <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a>
-            <button type="button" class="icsf-delete-user" data-delete-id="%s">Delete User</button>',
+            <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=view&id=%d' ).'" class="icsf-edit-user" data-id="%s">View User</a>
+            <button type="button" class="icsf-delete-user" data-delete-id="%s">Delete User</button>
+            <a href="%s" type="button" class="icsf-cv-download" download>CV Download</a>',
             esc_attr( $item['user_id'] ),
             esc_attr( $item['email'] ),
             esc_attr( $item['user_id'] ),
             esc_attr( $item['email'] ),
             esc_attr( $item['user_id'] ),
             esc_attr( $item['user_id'] ),
-            esc_attr( $item['user_id'] )
-            ,
+            esc_attr( $item['user_id'] ),
+            esc_attr( $item['user_id'] ),
+            esc_attr( $item['user_id'] ),
+            esc_attr( esc_attr( wp_upload_dir()['baseurl'] . $item['cv'] ) ),
         );
     }
 
@@ -159,9 +166,15 @@ class Subscribers_List_Table extends \WP_List_Table {
         );
     }
     
+/*
+<a title="Click to Download" href="/images/myw3schoolsimage.jpg" download>
+  <img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142"> Click to Download
+</a> */
+
     public function column_photo( $item ) {
         return sprintf(
-            "<img width='40' height='40' src='%s'/>",
+            '<a title="Click to Download" href="%s" download><img width="40" height="40" src="%s" /> Click to Download</a>',
+            site_url( 'wp-content/uploads' ) . $item['photo'],
             site_url( 'wp-content/uploads' ) . $item['photo'],
         );
     }

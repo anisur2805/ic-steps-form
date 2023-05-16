@@ -29,6 +29,7 @@
     $first_kids_gender = fieldCheck( 'first-kids-gender' );
     $first_kids_name = fieldCheck( 'first-kids-name' );
     $first_kids_dob = fieldCheck( 'first-kids-dob' );
+    $refer_by = fieldCheck( 'refer_by' );
 
 
     $second_kids_gender = fieldCheck( 'second-kids-gender' );
@@ -515,7 +516,11 @@
                     <!-- Step 4 -->
                     <h6></h6>
                     <section class="mb-30">
-                        <div class="ic-file-upload-wrapper">
+                        <div class="ic-file-upload-wrapper row">
+                            <div class="col-lg-6 mb-25">
+                                <label for="" class="form-label">Reference By</label>
+                                <input name="refer_by" type="text" class="form-control" value="" placeholder="Enter referer name" />
+                            </div>
                             <div class="col-lg-6 mb-25">
                                 <label for="membership_type" class="form-label">Membership Type*</label>
                                 <select name="membership_type" id="membership_type" class="form-select required" aria-label="Default select example">
