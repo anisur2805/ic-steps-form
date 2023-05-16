@@ -7,6 +7,7 @@ function ic_admin_menu() {
         'ic-register-users',
         'ic_register_users',
         'dashicons-admin-users',
+        30
     );
 }
 add_action( 'admin_menu', 'ic_admin_menu' );
@@ -15,20 +16,31 @@ function ic_register_users() { ?>
     <div class="wrap">
         <h1><?php echo get_admin_page_title(); ?></h1>
 
-        <form id="art-search-form" method="POST">
-            <?php
+        <?php 
 
-                global $wpdb;
-                $query   =  "SELECT * from {$wpdb->prefix}" . 'ic_members';
-                $results = $wpdb->get_results( $query, ARRAY_A );
-                $itc_subscriber_table = new Subscribers_List_Table( $results );
-                $itc_subscriber_table->prepare_items();
-                $itc_subscriber_table->display();
+        $action = isset($_GET['action']) ? $_GET['action'] : 'table';
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-            ?>
-        </form>
+        switch ($action) {
+            case 'view':
+                $template = __DIR__ . '/views/user-view.php';
+                break;
+
+            case 'edit':
+                $address = oop_ac_get_address($id);
+                $template = __DIR__ . '/views/user-edit.php';
+                break;
+
+            default:
+                $template = __DIR__ . '/views/table-view.php';
+                break;
+        }
+
+        if (file_exists($template)) {
+            include $template;
+        }
         
-        <div class="modal-wrapper-footer"></div>
+        ?>
     </div>
 
 <?php }
