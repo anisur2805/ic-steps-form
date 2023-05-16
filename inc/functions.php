@@ -500,7 +500,7 @@ if ( isset( $_GET['registration'] ) && $_GET['registration'] == 'success' ) {
     }
 }
 
-// handle the form submit for user registration message
+// handle the form submit for user registration
 add_action( 'admin_init', 'icsf_user_message' );
 function icsf_user_message() {
 
@@ -515,6 +515,63 @@ function icsf_user_message() {
 
         update_option( 'user_message', $message );
         update_option( 'user_message_subject', $message_subject );
+        
+    }
+}
+
+// handle the form submit for admin during registration
+add_action( 'admin_init', 'icsf_admin_action' );
+function icsf_admin_action() {
+
+    if (isset($_POST['icsf_admin_action']) && $_POST['icsf_admin_action'] == 1) {
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'admin_message' ) ) {
+            wp_die('Invalid nonce. Form submission not allowed.');
+        }
+
+        $subject = sanitize_text_field( $_POST['ic_admin_message_subject'] );
+        $message = sanitize_textarea_field( $_POST['ic_admin_message'] );
+
+        update_option( 'ic_admin_message', $message );
+        update_option( 'ic_admin_message_subject', $subject );
+        
+    }
+}
+
+// handle the form submit for User Confirmation
+add_action( 'admin_init', 'icsf_confirm_action' );
+function icsf_confirm_action() {
+
+    if (isset($_POST['icsf_confirm_action']) && $_POST['icsf_confirm_action'] == 1) {
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'user_confirm_message' ) ) {
+            wp_die('Invalid nonce. Form submission not allowed.');
+        }
+
+        $subject = sanitize_text_field( $_POST['get_confirm_message_subject'] );
+        $message = sanitize_textarea_field( $_POST['get_confirm_message'] );
+
+        update_option( 'get_confirm_message', $message );
+        update_option( 'get_confirm_message_subject', $subject );
+        
+    }
+}
+
+// handle the form submit for User Confirmation
+add_action( 'admin_init', 'icsf_reject_action' );
+function icsf_reject_action() {
+
+    if (isset($_POST['icsf_reject_action']) && $_POST['icsf_reject_action'] == 1) {
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'user_reject_message' ) ) {
+            wp_die('Invalid nonce. Form submission not allowed.');
+        }
+
+        $subject = sanitize_text_field( $_POST['ic_user_reject_message_subject'] );
+        $message = sanitize_textarea_field( $_POST['ic_user_reject_message'] );
+
+        update_option( 'ic_user_reject_message', $message );
+        update_option( 'ic_user_reject_message_subject', $subject );
         
     }
 }
@@ -591,4 +648,80 @@ function icsf_user_status_update() {
         );
     }
 
+}
+
+/**
+ * Ajax call for send user confirm email
+ */
+add_action('wp_ajax_icsf_confirm_email_send', 'icsf_confirm_email_send');
+add_action('wp_ajax_nopriv_icsf_confirm_email_send', 'icsf_confirm_email_send');
+function icsf_confirm_email_send() {
+
+    $data_id    = sanitize_key( $_POST['data_id'] );
+    $user_email = sanitize_key( $_POST['data_email'] );
+    
+    global $wpdb;
+    $table_name     = $wpdb->prefix . 'ic_members';
+    $table_status   = $wpdb->prefix . 'ic_user_status';
+    $user_subject   = '';
+    $headers        = array( 'Content-Type: text/html; charset=UTF-8' );
+    $name           = '';
+    $user_message = <<<EOD
+We received your request
+
+Hi $name,
+
+Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request.
+
+A member of our team will get back to you shortly.
+
+Thank you,
+Team FCCL
+EOD;
+
+    wp_mail( $user_email, $user_subject, $user_message, $headers );
+        
+    wp_send_json_success([
+        'is_emailed'   => true,
+        'message_body' => $user_message
+    ]);
+}
+
+
+
+/**
+ * Ajax call for send user reject email
+ */
+add_action('wp_ajax_icsf_reject_email_send', 'icsf_reject_email_send');
+add_action('wp_ajax_nopriv_icsf_reject_email_send', 'icsf_reject_email_send');
+function icsf_reject_email_send() {
+
+    $data_id    = sanitize_key( $_POST['data_id'] );
+    $user_email = sanitize_key( $_POST['data_email'] );
+    
+    global $wpdb;
+    $table_name     = $wpdb->prefix . 'ic_members';
+    $table_status   = $wpdb->prefix . 'ic_user_status';
+    $user_subject   = '';
+    $headers        = array( 'Content-Type: text/html; charset=UTF-8' );
+    $name           = '';
+    $user_message = <<<EOD
+We received your request
+
+Hi $name,
+
+Thank you for submitting a membership form to the Founder’s Community Club Ltd. This email confirms that we have received your request.
+
+A member of our team will get back to you shortly.
+
+Thank you,
+Team FCCL
+EOD;
+
+    wp_mail( $user_email, $user_subject, $user_message, $headers );
+        
+    wp_send_json_success([
+        'is_emailed'   => true,
+        'message_body' => $user_message
+    ]);
 }

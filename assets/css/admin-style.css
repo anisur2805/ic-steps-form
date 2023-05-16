@@ -161,3 +161,17 @@ table.table-view-list.subscribers td button {
 table.table-view-list.subscribers .icsf-delete-user {
     color: #f00;
 }
+
+table.table-view-list.subscribers td button,
+table.table-view-list.subscribers td a, 
+table.table-view-list.subscribers td select {
+    border: 1px solid #ddd !important;
+    padding:  5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    color: #000;
+}
+table.table-view-list.subscribers td select {
+    padding-top: 0;
+    padding-bottom: 0;
+}

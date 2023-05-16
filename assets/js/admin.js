@@ -53,7 +53,6 @@
             
             var self = $(this);
             var val = $(this).prev('select').val();
-            console.log( 'hello ', val )
             var spanElement = $(this).prev('span');
             var data = {
                 data_id: $(this).data('update-id'),
@@ -61,13 +60,56 @@
                 status: val
             }
             $.post(myTableObjUpdate.ajaxUrl, data, function (response) {
-                console.log( 'response', response )
-                // spanElement.text( response.data.status )
-                // spanElement.addClass('success')
-                // self.addClass('disabled')
-                // self.prop('disabled',  response.data.disabled );
+
             }).fail(function (e) {
                 console.log(myTableObjUpdate.error, e)
+            });
+
+        });
+
+        // Ajax call for send confirm email to user based on status on click `id`
+        $('body').on('click', 'table.subscribers .icsf-send-confirm-email', function(e){
+            e.preventDefault();
+
+            if ( !confirm( confirmEmailSendObj.confirm ) ) {
+				return;
+			}
+            
+            var self = $(this);
+            var data = {
+                data_id:    $(this).data('id'),
+                data_email: $(this).data('email'),
+                action:     'icsf_confirm_email_send',
+            }
+            $.post(confirmEmailSendObj.ajaxUrl, data, function (response) {
+                console.log( 'response', response )
+
+            }).fail(function (e) {
+                console.log(confirmEmailSendObj.error, e)
+            });
+
+        });
+
+
+        // Ajax call for send reject email to user based on status on click `id`
+        $('body').on('click', 'table.subscribers .icsf-send-reject-email', function(e){
+            e.preventDefault();
+
+            if ( !confirm( rejectEmailSendObj.confirm ) ) {
+				return;
+			}
+            
+            var self = $(this);
+            var data = {
+                data_id:    $(this).data('id'),
+                data_email: $(this).data('email'),
+                action:     'icsf_reject_email_send',
+            }
+            $.post(rejectEmailSendObj.ajaxUrl, data, function (response) {
+                console.log( 'response', response )
+
+            }).fail(function (e) {
+                console.log(rejectEmailSendObj.error, e)
             });
 
         });

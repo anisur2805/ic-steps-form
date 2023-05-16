@@ -120,9 +120,14 @@ class Subscribers_List_Table extends \WP_List_Table {
     public function column_view( $item ) {
         // <button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>
         return sprintf(
-            '<button type="button" class="icsf-send-email" data-id="%s">Send Email</button>
-            <button type="button" class="icsf-edit-user" data-id="%s">Edit User</button>
+            '<button type="button" class="icsf-send-confirm-email" data-id="%s" data-email="%s">Confirm Email</button>
+            <button type="button" class="icsf-send-reject-email" data-id="%s" data-email="%s">Reject Email</button>
+            <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a>
             <button type="button" class="icsf-delete-user" data-delete-id="%s">Delete User</button>',
+            esc_attr( $item['user_id'] ),
+            esc_attr( $item['email'] ),
+            esc_attr( $item['user_id'] ),
+            esc_attr( $item['email'] ),
             esc_attr( $item['user_id'] ),
             esc_attr( $item['user_id'] ),
             esc_attr( $item['user_id'] )
@@ -138,17 +143,6 @@ class Subscribers_List_Table extends \WP_List_Table {
         $table_name = $wpdb->prefix . 'ic_user_status';
         $query = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
     
-        // $select = '<select class="status-dropdown">';
-        // foreach( $query as $res ) {
-        //     $select .= '<option value="' . $res['id'] . '">' . $res['status'] . '</option>';
-        // }
-        // $select .= '</select>';
-        // <span class="%s">%s</span> 
-
-        // echo '<pre>';
-        //       print_r( $item );
-        // echo '</pre>';
-
         $select = '<select class="status-dropdown">';
         foreach ($query as $res) {
             $selected = ( $res['id'] == $item['status'] ) ? 'selected' : '';
@@ -156,7 +150,6 @@ class Subscribers_List_Table extends \WP_List_Table {
         }
         $select .= '</select>';
         
-
         return sprintf(
             '%s
             <button %s type="button" class="icsf-update-user" data-update-id="%s"> Update Status</button>',

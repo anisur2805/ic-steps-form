@@ -544,6 +544,7 @@
     border: 3px solid #f3f3f3;
     font-size: 20px;
     border-radius: 50%;
+    box-sizing: border-box;
 }
 @media (max-width: 1199px) {
     .wizard-content .wizard.wizard-circle > .steps .step {

@@ -39,7 +39,7 @@ function ICSF_admin_assets( $hook ) {
   wp_localize_script( 'icsf-admin-scripts', 'myTableObjDelete', array(
     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
     'nonce'   => wp_create_nonce( 'form-nonce' ),
-    'confirm' => __('Are you sure?', 'icsf'),
+    'confirm' => __('Are you sure, want to delete?', 'icsf'),
    ) );
 
    wp_localize_script( 'icsf-admin-scripts', 'myTableObjUpdate', array(
@@ -51,7 +51,19 @@ function ICSF_admin_assets( $hook ) {
    wp_localize_script( 'icsf-admin-scripts', 'myTableStatusDelete', array(
     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
     'nonce'   => wp_create_nonce( 'form-nonce' ),
-    'confirm' => __('Are you sure?', 'icsf'),
+    'confirm' => __('Are you sure, want to delete?', 'icsf'),
+   ) );
+
+   wp_localize_script( 'icsf-admin-scripts', 'confirmEmailSendObj', array(
+    'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+    'nonce'   => wp_create_nonce( 'form-nonce' ),
+    'confirm' => __('Are you sure, want to confirm?', 'icsf'),
+   ) );
+
+   wp_localize_script( 'icsf-admin-scripts', 'rejectEmailSendObj', array(
+    'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+    'nonce'   => wp_create_nonce( 'form-nonce' ),
+    'confirm' => __('Are you sure, want to reject?', 'icsf'),
    ) );
 
  }
