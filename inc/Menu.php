@@ -23,11 +23,11 @@ function ic_register_users() { ?>
 
         switch ($action) {
             case 'view':
-                $template = __DIR__ . '/views/user-view.php';
+                $template = __DIR__ . '/views/details-view.php';
                 break;
 
             case 'edit':
-                $template = __DIR__ . '/views/user-edit.php';
+                $template = __DIR__ . '/views/edit-view.php';
                 break;
 
             default:

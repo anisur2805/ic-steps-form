@@ -377,7 +377,7 @@ function icsf_delete_user() {
         $user_message = $get_delete_message;
         $headers      = array( 'Content-Type: text/html; charset=UTF-8' );
         $user_subject = $get_delete_message_subject;
-        // TODO: currently delete message is disable
+        // TODO: currently delete message is disable AR001
         // wp_mail( $email, $user_subject, $user_message, $headers );
         
     ?>
