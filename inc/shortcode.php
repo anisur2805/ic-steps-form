@@ -516,7 +516,7 @@
                     <h6></h6>
                     <section class="mb-30">
                         <div class="ic-file-upload-wrapper">
-                        <div class="col-lg-6 mb-25">
+                            <div class="col-lg-6 mb-25">
                                 <label for="membership_type" class="form-label">Membership Type*</label>
                                 <select name="membership_type" id="membership_type" class="form-select required" aria-label="Default select example">
                                     <option value="0">Choose Type</option>

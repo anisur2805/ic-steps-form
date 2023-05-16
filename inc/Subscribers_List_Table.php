@@ -24,11 +24,12 @@ class Subscribers_List_Table extends \WP_List_Table {
             'cb'                  => __( '<input type="checkbox" />', 'founders-club' ),
             'name'                => __( '<strong>Name</strong>', 'founders-club' ),
             'email'               => __( '<strong>Email</strong>', 'founders-club' ),
-            'created_at'               => __( '<strong>Create Date</strong>', 'founders-club' ),
+            'created_at'          => __( '<strong>Create Date</strong>', 'founders-club' ),
+            'membership_type'     => __( '<strong>Member Type</strong>', 'founders-club' ),
             'dob'                 => __( '<strong>DOB</strong>', 'founders-club' ),
-            'phone'                 => __( '<strong>Mobile No.</strong>', 'founders-club' ),
+            // 'phone'               => __( '<strong>Mobile No.</strong>', 'founders-club' ),
             'status'              => __( '<strong>Status</strong>', 'founders-club' ),
-            'photo'              => __( '<strong>Photo</strong>', 'founders-club' ),
+            'photo'               => __( '<strong>Photo</strong>', 'founders-club' ),
             'view'                => __( '<strong>Action</strong>', 'founders-club' ),
         );
 
@@ -109,6 +110,11 @@ class Subscribers_List_Table extends \WP_List_Table {
             '<strong>%s</strong>',
             esc_attr( $item['name'] ),
         );
+    }
+
+    public function column_membership_type( $item ) {
+        $type = ucwords( str_replace('-', ' ', $item['membership_type'] ) );
+        return sprintf( '<span>%s</span>', $type );
     }
 
     public function column_view( $item ) {
