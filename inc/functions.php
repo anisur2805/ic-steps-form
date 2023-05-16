@@ -13,7 +13,7 @@ function icsf_formHandler( $user_id ) {
         $nidNo                          = sanitize_text_field( $_POST['nid-no'] );
         $fb_url                         = sanitize_text_field( $_POST['fburl'] );
         $linkedin_url                   = sanitize_text_field( $_POST['linkedinurl'] );
-        $dob                            = sanitize_text_field( $_POST['date'] );
+        $dob                            = sanitize_text_field( date('d-m-Y', strtotime( $_POST['date'] ) ) );
         $business_name                  = sanitize_text_field( $_POST['business-name'] );
         $position_name                  = sanitize_text_field( $_POST['position-name'] );
         $business_email                 = sanitize_text_field( $_POST['business-email'] );
@@ -70,6 +70,7 @@ function icsf_formHandler( $user_id ) {
                 'permanent_addr'                 => $permanentAddr,
                 'nid_no'                         => $nidNo,
                 'created_at'                     => current_time( 'mysql' ),
+                // 'created_at'                     => date('d-m-Y H:i:s', strtotime(current_time('mysql', true))), //date('d-m-Y', strtotime( $_POST['date'] ) ) 
                 'fb_url'                         => $fb_url,
                 'linkedin_url'                   => $linkedin_url,
                 'dob'                            => $dob,
@@ -361,21 +362,23 @@ function icsf_delete_user() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'ic_members';
 
+        $query   = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}ic_members WHERE user_id = %d", $data_id);
+        $results = $wpdb->get_results($query);
+        $email   = $results[0]->email;
+
         $wpdb->delete($wpdb->users, array('ID' => $data_id));
         $wpdb->delete( $table_name, array('user_id' => $data_id));
 
         $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}ic_members WHERE user_id = %d", $data_id);
-        $results = $wpdb->get_results($query);
-        $email = $results['email'];
-
+       
         $get_delete_message         = get_option('user_delete_message');
         $get_delete_message_subject = get_option('user_delete_message_subject');
 
-        $user_message = __('We are sorry to');
+        $user_message = $get_delete_message;
         $headers      = array( 'Content-Type: text/html; charset=UTF-8' );
-        $user_subject = __( 'User account delete notification.' );
-        wp_mail( $email, $user_subject, $user_message, $headers );
+        $user_subject = $get_delete_message_subject;
+        // TODO: currently delete message is disable
+        // wp_mail( $email, $user_subject, $user_message, $headers );
         
     ?>
 

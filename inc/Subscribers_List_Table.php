@@ -100,7 +100,7 @@ class Subscribers_List_Table extends \WP_List_Table {
 
     public function column_created_at( $item ) {
         $created_at = $item['created_at'];
-        $formatted_date = date( 'Y-m-d', strtotime( $created_at ) );
+        $formatted_date = date( 'd-m-Y', strtotime( $created_at ) );
 
         return $formatted_date;
     }
@@ -112,10 +112,23 @@ class Subscribers_List_Table extends \WP_List_Table {
         );
     }
 
+    // public function column_membership_type( $item ) {
+    //     $type = ucwords( str_replace('-', ' ', $item['membership_type'] ) );
+    //     return sprintf( '<span>%s</span>', $type );
+    // }
+
     public function column_membership_type( $item ) {
-        $type = ucwords( str_replace('-', ' ', $item['membership_type'] ) );
-        return sprintf( '<span>%s</span>', $type );
-    }
+        if ( isset( $item['membership_type'] ) && ! is_null( $item['membership_type'] ) ) {
+            if ( $item['membership_type'] === '0' ) {
+                $type = 'Not Selected';
+            } else {
+                $type = ucwords( str_replace( '-', ' ', $item['membership_type'] ) );
+            }
+            return sprintf( '<span>%s</span>', $type );
+        } else {
+            return '';
+        }
+    }        
 
     public function column_view( $item ) {
         // echo '<pre>';
@@ -123,12 +136,12 @@ class Subscribers_List_Table extends \WP_List_Table {
         // echo '</pre>';
         // <button type="button" class="modal-toggle view-popup" data-id="%s"> View Details</button>
         return sprintf(
-            '<button type="button" class="icsf-send-confirm-email" data-id="%s" data-email="%s">Confirm Email</button>
+            '<button type="button" class="view-more-btn">...</button><div class="ic-action-button-wrapper"><button type="button" class="icsf-send-confirm-email" data-id="%s" data-email="%s">Confirm Email</button>
             <button type="button" class="icsf-send-reject-email" data-id="%s" data-email="%s">Reject Email</button>
             <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a>
             <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=view&id=%d' ).'" class="icsf-edit-user" data-id="%s">View User</a>
             <button type="button" class="icsf-delete-user" data-delete-id="%s">Delete User</button>
-            <a href="%s" type="button" class="icsf-cv-download" download>CV Download</a>',
+            <a href="%s" type="button" class="icsf-cv-download" download>CV Download</a></div>',
             esc_attr( $item['user_id'] ),
             esc_attr( $item['email'] ),
             esc_attr( $item['user_id'] ),
@@ -148,6 +161,11 @@ class Subscribers_List_Table extends \WP_List_Table {
         $disabled = $item['status'] == 1 ? 'disabled' : '';
         global $wpdb;
         $table_name = $wpdb->prefix . 'ic_user_status';
+
+        if ( ! $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+            return;
+        }
+
         $query = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
     
         $select = '<select class="status-dropdown">';

@@ -143,8 +143,40 @@ form#art-search-form table {
 } */
 
 table.table-view-list.subscribers .column-view {
-    width: 290px;
+    /* width: 290px; */
+    position: relative;
 }
+table.table-view-list.subscribers button.view-more-btn {
+    padding: 5px 10px 10px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+table.table-view-list.subscribers .ic-action-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background: #a0a0a08a;
+    border-radius: 5px;
+    position: absolute;
+    right: 0;
+    min-width: 140px;
+    top: 0;
+    left: auto;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    z-index: 9999;
+}
+table.table-view-list.subscribers .show .ic-action-button-wrapper {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0px);
+
+}
+
 table.table-view-list.subscribers td span {
     display: block;
 }
@@ -174,6 +206,8 @@ table.table-view-list.subscribers td select {
     border-radius: 4px;
     color: #000;
     display: inline-block;
+    text-align: center;
+    background: #f8f8f8;
 }
 table.table-view-list.subscribers td select {
     padding-top: 0;

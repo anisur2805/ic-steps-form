@@ -17,6 +17,11 @@
 
         });
 
+        // Ajax call for display more action dropdown
+        $('body').on('click', 'table.subscribers .view-more-btn', function(e){
+            $(this).closest('td').addClass('show');
+        });
+
         // Ajax call for delete user based on click `id`
         $('body').on('click', 'table.subscribers .icsf-delete-user', function(e){
             e.preventDefault();

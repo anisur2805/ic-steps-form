@@ -27,7 +27,6 @@ function ic_register_users() { ?>
                 break;
 
             case 'edit':
-                $address = oop_ac_get_address($id);
                 $template = __DIR__ . '/views/user-edit.php';
                 break;
 
