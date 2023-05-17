@@ -147,7 +147,7 @@ function icsf_formHandler( $user_id ) {
             ]
         );
 
-        echo $id . ' insert id';
+        // echo $id . ' insert id';
     }
 
 }
@@ -495,7 +495,7 @@ function icsf_user_message() {
             wp_die('Invalid nonce. Form submission not allowed.');
         }
 
-        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] );
+        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] ) . '<br/>';
         $message         = $_POST['ic_user_message'];
 
         $allowed_html = [
@@ -504,6 +504,7 @@ function icsf_user_message() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -533,6 +534,7 @@ function icsf_admin_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -563,6 +565,7 @@ function icsf_confirm_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -591,6 +594,7 @@ function icsf_reject_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -620,6 +624,7 @@ function icsf_user_delete_message() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -708,6 +713,7 @@ function icsf_confirm_email_send() {
             'href'  => true,
             'title' => true,
         ],
+        'br' => [],
         'strong' => [],
     ];
     $clear_post = wp_kses( $get_confirm_message, $allowed_html );
@@ -746,6 +752,7 @@ function icsf_reject_email_send() {
             'href'  => true,
             'title' => true,
         ],
+        'br' => [],
         'strong' => [],
     ]; 
     $clear_message = wp_kses_post( $user_reject_message, $allowed_html );
