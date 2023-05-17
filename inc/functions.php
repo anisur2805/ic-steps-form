@@ -208,7 +208,7 @@ function ic_register_user() {
                 "[company_name]"  => $business_name,
                 "[Phone]"         => $phone,
                 "[Email]"         => $email,
-                "[Time]"          => date("Y/m/d"),
+                "[Time]"          => date("d/m/Y"),
             ];
             $get_admin_message = strtr( $get_admin_message, $replace_shortcode );
             wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
@@ -495,7 +495,7 @@ function icsf_user_message() {
             wp_die('Invalid nonce. Form submission not allowed.');
         }
 
-        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] ) . '<br/>';
+        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] );
         $message         = $_POST['ic_user_message'];
 
         $allowed_html = [
