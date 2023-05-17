@@ -410,7 +410,7 @@ function icsf_delete_user_status() {
 }
 
 // Add new status column in database
-add_action( 'plugins_loaded', 'ic_members_add_status_column' );
+// add_action( 'plugins_loaded', 'ic_members_add_status_column' );
 function ic_members_add_status_column() {
     global $wpdb;
 

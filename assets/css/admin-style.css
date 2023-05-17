@@ -207,7 +207,7 @@ table.table-view-list.subscribers td select {
     color: #000;
     display: inline-block;
     text-align: center;
-    background: #f8f8f8;
+    background-color: #f8f8f8;
 }
 table.table-view-list.subscribers td select {
     padding-top: 0;
