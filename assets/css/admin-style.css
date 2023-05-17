@@ -170,7 +170,7 @@ table.table-view-list.subscribers .ic-action-button-wrapper {
     transition: all 0.3s;
     z-index: 9999;
 }
-table.table-view-list.subscribers .show .ic-action-button-wrapper {
+table.table-view-list.subscribers .show-more-action .ic-action-button-wrapper {
     visibility: visible;
     opacity: 1;
     transform: translateY(0px);

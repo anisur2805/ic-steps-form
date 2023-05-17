@@ -19,8 +19,18 @@
 
         // Ajax call for display more action dropdown
         $('body').on('click', 'table.subscribers .view-more-btn', function(e){
-            $(this).closest('td').addClass('show');
+            $(this).closest('tr').addClass("show-more-action");
         });
+
+        $(document).on('click', function(event) {
+            var target = $(event.target);
+            if (target.hasClass('view-more-btn')) {
+              target.closest('tr').addClass('show-more-action');
+            } else if (!target.closest('.ic-action-button-wrapper').length) {
+              $('.show-more-action').removeClass('show-more-action');
+            }
+          });
+          
 
         // Ajax call for delete user based on click `id`
         $('body').on('click', 'table.subscribers .icsf-delete-user', function(e){

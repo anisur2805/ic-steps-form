@@ -292,7 +292,10 @@
     margin: 0 auto 10px;
     width: fit-content;
 }
-
+.show-reg-msg p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
 /* .show-reg-msg.error-reg-msg {
     color: #f00;
 }

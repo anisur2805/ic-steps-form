@@ -560,7 +560,7 @@
                                 <input type="file" name="visiting-card">
                             </div> -->
 
-                            <?php wp_nonce_field( 'ic_register_action', 'ic_register_name' );?>
+                            <?php wp_nonce_field( 'ic_register_action' );?>
                         </div>
                     </section>
                 </form>

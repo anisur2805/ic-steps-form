@@ -161,9 +161,9 @@ function ic_register_user() {
 
     if ( isset( $_POST['submit'] ) ) {
 
-        $nonce = isset( $_POST['ic_register_name'] ) ? $_POST['ic_register_name'] : '';
+        $nonce = isset( $_POST['_wpnonce'] ) ? $_POST['_wpnonce'] : '';
 
-        if ( !wp_verify_nonce( $nonce, 'ic_register_action' ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'ic_register_action' ) ) {
             wp_send_json_error( [
                 'error' => 'something went wrong',
             ] );
