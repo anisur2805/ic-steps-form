@@ -6,8 +6,8 @@ function ic_members_activate() {
     $ic_members_table = $wpdb->prefix . 'ic_members';
     $ic_status_table  = $wpdb->prefix . 'ic_user_status';
 
-
-    $table_schema = "CREATE TABLE IF NOT EXISTS $ic_members_table (
+    $table_schema = "
+    CREATE TABLE IF NOT EXISTS $ic_members_table (
         `id` int NOT NULL AUTO_INCREMENT,
         `user_id` int NOT NULL,
         `name` varchar(255) NOT NULL,
@@ -52,7 +52,7 @@ function ic_members_activate() {
   ) $charset_collate";
 
 
-    $table_schema = "CREATE TABLE IF NOT EXISTS $ic_status_table (
+    $table_schema2 = "CREATE TABLE IF NOT EXISTS $ic_status_table (
         `id` int NOT NULL AUTO_INCREMENT,
         `status` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
@@ -62,6 +62,7 @@ function ic_members_activate() {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     }
     dbDelta( $table_schema );
+    dbDelta( $table_schema2 );
 }
 
 // Create a table named `ic_user_status`
