@@ -41,6 +41,11 @@
     $third_kids_dob = fieldCheck( 'third-kids-dob' );
     $membership_type = fieldCheck( 'membership_type' );
 
+        echo '<pre>';
+          print_r( $name );
+          print_r( $membership_type );
+    echo '</pre>';
+
 ?>
 <section class="ic-membership-form ic-section-space">
     <div class="container ">

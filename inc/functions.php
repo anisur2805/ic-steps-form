@@ -13,7 +13,7 @@ function icsf_formHandler( $user_id ) {
         $nidNo                          = sanitize_text_field( $_POST['nid-no'] );
         $fb_url                         = sanitize_text_field( $_POST['fburl'] );
         $linkedin_url                   = sanitize_text_field( $_POST['linkedinurl'] );
-        $dob                            = sanitize_text_field( date('d-m-Y', strtotime( $_POST['date'] ) ) );
+        $dob                            = date('d-m-Y', strtotime( $_POST['date'] ) );
         $business_name                  = sanitize_text_field( $_POST['business-name'] );
         $position_name                  = sanitize_text_field( $_POST['position-name'] );
         $business_email                 = sanitize_text_field( $_POST['business-email'] );
@@ -142,8 +142,12 @@ function icsf_formHandler( $user_id ) {
                 '%s',
                 '%s',
                 '%s',
+                '%s',
+                '%s',
             ]
         );
+
+        echo $id . ' insert id';
     }
 
 }
@@ -161,13 +165,13 @@ function ic_register_user() {
 
     if ( isset( $_POST['submit'] ) ) {
 
-        $nonce = isset( $_POST['_wpnonce'] ) ? $_POST['_wpnonce'] : '';
+        // $nonce = isset( $_POST['_wpnonce'] ) ? $_POST['_wpnonce'] : '';
 
-        if ( ! wp_verify_nonce( $nonce, 'ic_register_action' ) ) {
-            wp_send_json_error( [
-                'error' => 'something went wrong',
-            ] );
-        }
+        // if ( ! wp_verify_nonce( $nonce, 'ic_register_action' ) ) {
+        //     wp_send_json_error( [
+        //         'error' => 'something went wrong',
+        //     ] );
+        // }
 
         $email              = sanitize_email( $_POST['email'] );
         $url                = sanitize_text_field( $_POST['url'] );
@@ -411,11 +415,10 @@ function ic_members_add_status_column() {
     global $wpdb;
 
     $current_version = ICSF_VERSION;
-    $next_version = '1.6';
+    $next_version = '1.8';
     $ic_members_table = $wpdb->prefix . 'ic_members';
 
     $installed_version = get_option('ic_members_version');
-
     if ($installed_version != $next_version) {
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN status varchar(5) DEFAULT NULL");
         $wpdb->query("ALTER TABLE $ic_members_table ADD COLUMN created_at DATETIME NOT NULL");
@@ -808,7 +811,6 @@ function ic_update_user(){
         $table_name  = $wpdb->prefix . 'ic_members';
         $users_table = $wpdb->prefix . 'users';
       
-        var_dump($pass);
         if ( ! empty( $pass ) ) {
             wp_set_password( $pass, $user_id );
         }

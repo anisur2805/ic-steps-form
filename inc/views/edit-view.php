@@ -19,6 +19,15 @@
                     <label for="" class="form-label">Name*</label>
                     <input name="name" type="text" class="form-control required" value="<?php echo $results[0]['name']; ?>" placeholder="Enter your full name">
                 </div>
+
+                <div class="col-lg-6 mb-25">
+                    <label for="" class="form-label">User Name (Not changeable)</label>
+                    <input name="user-name" readonly value="<?php echo $results[0]['user_name']; ?>" type="text" class="form-control" placeholder="Enter User Name">
+                </div>
+                <div class="col-lg-6 mb-25">
+                    <label class="form-label">Email Address (Not changeable)</label>
+                    <input name="email" type="email" readonly value="<?php echo $results[0]['email']; ?>" class="form-control" placeholder="Enter your email address" />
+                </div>
                 
                 <!-- Phone Number -->
                 <div class="col-lg-6 mb-25">
