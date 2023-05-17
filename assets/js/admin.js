@@ -46,6 +46,30 @@
             });
         });
         
+        // print the view page
+        function printSection() {
+            // Hide all elements except the desired section for printing
+            const sectionsToHide = document.querySelectorAll('body > *:not(.print-section)');
+            sectionsToHide.forEach((section) => {
+              section.style.display = 'none';
+            });
+          
+            // Apply print styles
+            const style = document.createElement('style');
+            style.innerHTML = '@media print { body { margin: 0; } }';
+            document.head.appendChild(style);
+          
+            // Print the desired section
+            window.print();
+          
+            // Remove the print styles
+            style.parentNode.removeChild(style);
+          
+            // Restore the visibility of the hidden sections
+            sectionsToHide.forEach((section) => {
+              section.style.display = '';
+            });
+          }          
           
 
         // Ajax call for delete user based on click `id`

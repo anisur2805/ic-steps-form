@@ -3,7 +3,7 @@
 echo '<div class="view-users"><div class="modal-body">
 <div class="modal-content">';
 
-printf( '<div class="ic-action-wrap"><a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a><a type="button" href="'.admin_url( 'admin.php?page=ic-register-users').'">Back to List Page</a><a class="ic-pdf-download-btn" type="button" href="#">Download as PDF</a></div>', esc_attr( $id ), esc_attr( $id ) );
+printf( '<div class="ic-action-wrap"><a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a><a type="button" href="'.admin_url( 'admin.php?page=ic-register-users').'">Back to List Page</a><a onclick="window.print(); return false;" class="ic-pdf-download-btn" type="button" href="#">Download as PDF</a></div>', esc_attr( $id ), esc_attr( $id ) );
 
     global $wpdb;
     $table_name = $wpdb->prefix . 'ic_members';
@@ -11,7 +11,7 @@ printf( '<div class="ic-action-wrap"><a type="button" href="'.admin_url( 'admin.
     $results    = $wpdb->get_results( $query, ARRAY_A );
 
     foreach ( $results as $result ) {
-        echo '<div>';
+        echo '<div class="print-section"><h2 class="hide-on-normal">Founders Community Club Ltd.</h2>';
         echo '<div><h3>Name</h3> ' . $result['name'] . '</div>';
         echo '<div><h3>Email</h3>' . $result['email'] . '</div>';
         echo '<div><h3>Date of birth</h3>' . $result['dob'] . '</div>'; 
@@ -55,9 +55,9 @@ printf( '<div class="ic-action-wrap"><a type="button" href="'.admin_url( 'admin.
         echo '<div><h3>Linked In Link</h3>' . '<a target="_blank" href="'. esc_url( $result['linkedin_url'] ) . '">'.$result['linkedin_url'].'</a></div>';
 
         echo '<div><h3>Photo</h3>' . '<img width="100" src="'. esc_attr( wp_upload_dir()['baseurl'] . $result['photo']) .'" alt="My Image"></div>';
-        echo '<div><h3>NID</h3>' . '<img width="100" src="'. esc_attr( wp_upload_dir()['baseurl'] . $result['nid'] ).'" /></div>';
-        echo '<div><h3>Trade License</h3>' . '<img width="100" src="'. esc_attr( wp_upload_dir()['baseurl'] . $result['trade_license'] ).'" /></div>';
-        echo '<div><h3>CV</h3>' . '<a href="'. esc_attr( wp_upload_dir()['baseurl'] . $result['cv'] ).'" download>Download CV</a></div>';
+        echo '<div class="ic-nid-row"><h3>NID</h3>' . '<img width="100" src="'. esc_attr( wp_upload_dir()['baseurl'] . $result['nid'] ).'" /></div>';
+        echo '<div class="ic-license-row"><h3>Trade License</h3>' . '<img width="100" src="'. esc_attr( wp_upload_dir()['baseurl'] . $result['trade_license'] ).'" /></div>';
+        echo '<div class="ic-cv-row"><h3>CV</h3>' . '<a href="'. esc_attr( wp_upload_dir()['baseurl'] . $result['cv'] ).'" download>Download CV</a></div>';
 
         echo '</div>';
     }

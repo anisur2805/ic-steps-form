@@ -36,6 +36,7 @@ require ICSF_DIR . '/inc/Sub-menu.php';
 require ICSF_DIR . '/inc/Status.php';
 require ICSF_DIR . '/inc/Subscribers_List_Table.php';
 require ICSF_DIR . '/inc/enqueue.php';
+require ICSF_DIR . '/inc/role.php';
 
 /**
  * Create shortcode 'ic_steps_form'

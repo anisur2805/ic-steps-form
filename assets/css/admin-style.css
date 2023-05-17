@@ -237,6 +237,10 @@ table.table-view-list.subscribers td.photo img {
     position: relative;
 }
 
+.view-users img {
+    object-fit: cover;
+}
+
 .ic-action-wrap a {
     text-decoration: none;
     padding: 6px 10px;
@@ -308,3 +312,61 @@ table.table-view-list.subscribers td.photo img {
 .ic-user-edit-wrapper #password-error {
     color: #f00;
 }
+
+.hide-on-normal{
+    display: none;
+}
+
+/*
+* Print Screen Styles
+*/
+@media print {
+    body * {
+      visibility: hidden;
+    }
+    .print-section,
+    .print-section * {
+      visibility: visible;
+    }
+    
+    .hide-on-normal {
+        margin-left: 10px;
+    }
+
+    .print-section .hide-on-normal{
+        display: block;
+    }
+
+    /* Set paper size (e.g., A4, Letter, etc.) */
+    @page {
+        size: A4; /* Change to the desired paper size */
+    }
+
+    @page {
+        size: auto;
+        margin: 0;
+      }
+    
+      body {
+        margin: 0;
+      }
+    
+      /* Hide header and footer */
+      .no-print {
+        display: none;
+      }
+
+    .ic-nid-row {
+        clear: both;
+        margin-top: 100px;
+    }
+    .ic-license-row {
+        clear: both;
+        margin-top: 100px;        
+    }
+    .ic-cv-row {
+        display: none !important;
+    }
+
+  }
+  
