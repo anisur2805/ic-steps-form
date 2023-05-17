@@ -17,11 +17,11 @@
 
         });
 
-        // Ajax call for display more action dropdown
+        // Ajax call for display more action dropdown #1
         $('body').on('click', 'table.subscribers .view-more-btn', function(e){
             $(this).closest('tr').addClass("show-more-action");
         });
-
+        // Ajax call for hide more action dropdown #2
         $(document).on('click', function(event) {
             var target = $(event.target);
             if (target.hasClass('view-more-btn')) {
@@ -29,7 +29,23 @@
             } else if (!target.closest('.ic-action-button-wrapper').length) {
               $('.show-more-action').removeClass('show-more-action');
             }
-          });
+        });
+
+        // in admin panel check password and confirm password are same
+        $(document).ready(function() {
+            $('#confirm').on('keyup', function() {
+                var password = $('#password').val();
+                var confirmPassword = $(this).val();
+                if (password !== confirmPassword) {
+                    $('#password-error').text("Passwords do not match.").show();
+                    document.querySelector('button[name="update-user"]').disabled = true;
+                } else {
+                    $('#password-error').hide();
+                    document.querySelector('button[name="update-user"]').disabled = false;
+                }
+            });
+        });
+        
           
 
         // Ajax call for delete user based on click `id`

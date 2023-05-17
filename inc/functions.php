@@ -755,3 +755,147 @@ function icsf_reject_email_send() {
         'message_body' => $user_reject_message,
     ]);
 }
+
+// Update user profile
+add_action('admin_init', 'ic_update_user');
+function ic_update_user(){
+    if( isset( $_POST['update-user'] ) ) {
+
+        $name                           = sanitize_text_field( $_POST['name'] );
+        $pass                           = sanitize_text_field( $_POST['pass'] );
+        $user_id                        = sanitize_text_field( $_POST['user_id'] );
+        $phone                          = sanitize_text_field( $_POST['phone'] );
+        $presentAddr                    = sanitize_text_field( $_POST['present-addr'] );
+        $permanentAddr                  = sanitize_text_field( $_POST['permanent-addr'] );
+        $nidNo                          = sanitize_text_field( $_POST['nid-no'] );
+        $fb_url                         = sanitize_text_field( $_POST['fburl'] );
+        $linkedin_url                   = sanitize_text_field( $_POST['linkedinurl'] );
+        $dob                            = sanitize_text_field( date('d-m-Y', strtotime( $_POST['date'] ) ) );
+        $business_name                  = sanitize_text_field( $_POST['business-name'] );
+        $position_name                  = sanitize_text_field( $_POST['position-name'] );
+        $business_email                 = sanitize_text_field( $_POST['business-email'] );
+        $business_phone                 = sanitize_text_field( $_POST['business-phone'] );
+        $url                            = sanitize_text_field( $_POST['url'] );
+        $last_educational_qualification = sanitize_text_field( $_POST['last-educational'] );
+        $fathers_name                   = sanitize_text_field( $_POST['father-name'] );
+        $mothers_name                   = sanitize_text_field( $_POST['mother-name'] );
+        $is_married                     = sanitize_text_field( $_POST['isMarried'] );
+        $spouse_name                    = sanitize_text_field( $_POST['spouse-name'] );
+        $anniversary                    = sanitize_text_field( $_POST['anniversary'] );
+        $haveChild                      = sanitize_text_field( $_POST['have-children'] );
+
+        $first_child_name   = sanitize_text_field( $_POST['first-kids-name'] );
+        $first_child_dob    = sanitize_text_field( $_POST['first-kids-dob'] );
+        $first_child_gender = sanitize_text_field( $_POST['first-kids-gender'] );
+
+        $second_child_name   = sanitize_text_field( $_POST['second-kids-name'] );
+        $second_child_dob    = sanitize_text_field( $_POST['second-kids-dob'] );
+        $second_child_gender = sanitize_text_field( $_POST['second-kids-gender'] );
+
+        $third_child_name   = sanitize_text_field( $_POST['third-kids-name'] );
+        $third_child_dob    = sanitize_text_field( $_POST['third-kids-dob'] );
+        $third_child_gender = sanitize_text_field( $_POST['third-kids-gender'] );
+        $membership_type    = sanitize_text_field( $_POST['membership_type'] );
+        $refer_by           = sanitize_text_field( $_POST['refer_by'] );
+
+        // $photo = $_FILES( 'photo' );
+        $photo = ic_upload_file( 'photo' );
+        $nid   = ic_upload_file( 'nid' );
+        $trade = ic_upload_file( 'trade' );
+        $cv    = ic_upload_file( 'cv' );
+
+        global $wpdb;
+        $table_name  = $wpdb->prefix . 'ic_members';
+        $users_table = $wpdb->prefix . 'users';
+      
+        var_dump($pass);
+        if ( ! empty( $pass ) ) {
+            wp_set_password( $pass, $user_id );
+        }
+
+        $wpdb->update(
+            $table_name,
+            [
+                'name'                           => $name,
+                'status'                        =>  0,
+                'phone'                          => $phone,
+                'present_addr'                   => $presentAddr,
+                'permanent_addr'                 => $permanentAddr,
+                'nid_no'                         => $nidNo,
+                'created_at'                     => current_time( 'mysql' ),
+                'fb_url'                         => $fb_url,
+                'linkedin_url'                   => $linkedin_url,
+                'dob'                            => $dob,
+                'business_name'                  => $business_name,
+                'position_name'                  => $position_name,
+                'business_email'                 => $business_email,
+                'business_phone'                 => $business_phone,
+                'url'                            => $url,
+                'last_educational_qualification' => $last_educational_qualification,
+                'fathers_name'                   => $fathers_name,
+                'mothers_name'                   => $mothers_name,
+                'is_married'                     => $is_married,
+                'spouse_name'                    => $spouse_name,
+                'anniversary'                    => $anniversary,
+                'haveChild'                      => $haveChild,
+                'first_child_name'               => $first_child_name,
+                'first_child_dob'                => $first_child_dob,
+                'first_child_gender'             => $first_child_gender,
+                'second_child_name'              => $second_child_name,
+                'second_child_dob'               => $second_child_dob,
+                'second_child_gender'            => $second_child_gender,
+                'third_child_name'               => $third_child_name,
+                'third_child_dob'                => $third_child_dob,
+                'third_child_gender'             => $third_child_gender,
+                'membership_type'                => $membership_type,
+                'photo'                          => $photo,
+                'nid'                            => $nid,
+                'trade_license'                  => $trade,
+                'cv'                             => $cv,
+                'refer_by'                       => $refer_by,
+            ],
+            ['user_id' => $user_id],
+            [
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+            ],
+            ['%d']
+        );
+
+    }
+}

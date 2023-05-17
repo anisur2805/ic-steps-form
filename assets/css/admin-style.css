@@ -251,3 +251,60 @@ table.table-view-list.subscribers td.photo img {
     color: #fff !important;
     border-color: #000 !important;
 }
+
+/* User edit page */
+.ic-user-edit-wrapper.panel-body.wizard-content .row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.ic-user-edit-wrapper.panel-body.wizard-content .ic-file-upload-item img {
+    object-fit: cover;
+}
+
+.ic-user-edit-wrapper.panel-body.wizard-content .ic-file-upload-item {
+    width: 30.333%;
+}
+
+.ic-user-edit-wrapper.panel-body.wizard-content .row .col-lg-6 {
+        flex: 0 0 auto;
+        width: calc( 50% - 20px );
+        flex-direction: column;
+        display: flex;
+}
+
+.ic-user-edit-wrapper.panel-body.wizard-content .row input:not([type="radio"]):not([type="checkbox"]),
+  .ic-user-edit-wrapper.panel-body.wizard-content .row select,
+  .ic-user-edit-wrapper.panel-body.wizard-content .row textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 7px 10px !important;
+    min-height: 44px;
+    border-radius: 6px;
+    outline: 0 !important;
+    border: 0 !important;
+}
+
+.ic-user-edit-wrapper.panel-body.wizard-content .row .col-lg-6 label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.ic-user-edit-wrapper.panel-body.wizard-content .row .col-lg-6 .form-radio label {
+  display: inline-block;
+}
+
+.ic-user-edit-wrapper section.mb-30 {
+    padding: 20px;
+    background: #ddd;
+    width: calc(100% - 40px);
+}
+
+.ic-user-edit-wrapper .ic-file-upload-item h6 {
+    font-size: 13px;
+    margin: 0 0 10px;
+}
+
+.ic-user-edit-wrapper #password-error {
+    color: #f00;
+}
