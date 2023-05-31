@@ -318,7 +318,7 @@
 }
 
 .wizard-content .wizard>.actions>ul>li>a[href="#finish"] {
-    display: none !important;
+    /* display: none !important; */
 }
 
 

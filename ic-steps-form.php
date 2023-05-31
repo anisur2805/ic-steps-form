@@ -12,10 +12,14 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
+use CodesVault\Howdyqb\DB;
+
 if ( !defined( 'ABSPATH' ) ) {
  exit;
 }
- session_start();
+if( ! is_admin() ) {
+    session_start();
+}
 
 if ( !defined( 'ICSF_VERSION' ) ) {
  define( 'ICSF_VERSION', '1.1' );

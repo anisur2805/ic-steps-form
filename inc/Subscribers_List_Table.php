@@ -8,15 +8,15 @@ if ( !class_exists( 'WP_List_Table' ) ) {
 }
 
 class Subscribers_List_Table extends \WP_List_Table {
-    private $_items;
 
-    public function __construct( $data ) {
+    public function __construct() {
         parent::__construct( [
             'singular' => 'subscriber',
             'plural'   => 'subscribers',
             'ajax'     => false,
         ] );
-        $this->_items = $data;
+        add_action( 'admin_head', [$this, 'add_custom_screen_options' ] );
+
     }
 
     public function get_columns() {
@@ -31,33 +31,239 @@ class Subscribers_List_Table extends \WP_List_Table {
             'status'              => __( '<strong>Status</strong>', 'founders-club' ),
             'photo'               => __( '<strong>Photo</strong>', 'founders-club' ),
             'view'                => __( '<strong>Action</strong>', 'founders-club' ),
+            'delete'                => __( '<strong>column_delete</strong>', 'founders-club' ),
         );
 
         return $columns;
+    }
+
+    public function add_custom_screen_options() {
+        die( 'die here' );
+        error_log('add_custom_screen_options() method called'); 
+        $screen = get_current_screen();
+
+        // Add screen options only for your WP List Table admin page
+        if ( $screen->id === 'toplevel_page_ic-register-users' ) {
+            $option = 'per_page'; // Option key
+            $args = [
+                'label'   => 'Items per page', // Label for the screen option
+                'default' => 20, // Default value
+                'option'  => 'custom_items_per_page' // Custom option name (optional)
+            ];
+            add_screen_option( $option, $args );
+
+            // Retrieve the selected value from screen options
+            $per_page = get_user_meta( get_current_user_id(), $option, true );
+
+            // // Set the number of items per page in your WP List Table
+            // $this->set_pagination_args( [
+            //     'total_items' => $this->get_total_items(), // Replace with your method to get the total number of items
+            //     'per_page'    => $per_page ? $per_page : $args['default'],
+            // ] );
+        }
     }
 
     /**
      * Handles data query and filter, sorting, and pagination.
      */
     public function prepare_items() {
+        $column     = $this->get_columns();
+        $hidden     = [];
+        $sortable   = $this->get_sortable_columns();
+        $primary  = 'name';
 
-        $per_page     = 20;
-        $total_items  = count( $this->_items );
+        $this->_column_headers = [ $column, $hidden, $sortable, $primary ];
+
+        $per_page     = 2;
         $current_page = $this->get_pagenum();
+        $offset       = ( $current_page - 1 ) * $per_page;
+
+        $search = isset($_REQUEST['s']) ? sanitize_text_field($_REQUEST['s']) : '';
+
+        $args = [
+            'number' => $per_page,
+            'offset' => $offset,
+            's'      => $search,
+        ];
+
+        if( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
+            $args['orderby'] = $_REQUEST['orderby'];
+            $args['order']   = $_REQUEST['order'];
+        }
+
+        $this->items = ic_retrieve_data( $args );
+
         $this->set_pagination_args( [
-            'total_items' => $total_items,
+            'total_items' => ic_member_count(),
             'per_page'    => $per_page,
         ] );
 
-        $data                  = array_slice( $this->_items, ( $current_page - 1 ) * $per_page, $per_page );
-        $this->items           = $data;
-        $this->_column_headers = [$this->get_columns(), [], []];
+        if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['bulk-action-submit'] ) ) {
+            $this->process_bulk_action();
+        }
+    }
 
+    public function extra_tablenav($which) {
+        if ($which === 'top') {
+            $search_text = isset($_REQUEST['s']) ? esc_attr($_REQUEST['s']) : '';
+            ?>
+            <div class="alignleft actions">
+                <form method="get">
+                    <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
+                    <?php $this->search_box('Search', 'search_id', $search_text); ?>
+                </form>
+            </div>
+            <?php
+        }
+    }
+
+    /**
+     * Display the table navigation.
+     *
+     * @param string $which The position of the navigation (top/bottom).
+     */
+    protected function display_tablenav($which) {
+        if ($which === 'top') {
+            // Call get_views to retrieve the views HTML
+            $views = $this->get_views();
+
+            if (!empty($views)) {
+                ?>
+                <div class="tablenav <?php echo esc_attr($which); ?>">
+                    <div class="alignleft actions">
+                        <h2 class="screen-reader-text"><?php esc_html_e('Filter by', 'text-domain'); ?></h2>
+                        <?php echo $views; ?>
+                    </div>
+                    <?php //$this->pagination('top'); ?>
+                </div>
+                <?php
+            }
+        }
+
+        // Call the parent method to display the table navigation
+        parent::display_tablenav($which);
+
+        // Trigger the form submission
+        if ($which === 'bottom') {
+            echo '<input type="hidden" name="bulk-action-submit" value="1" />';
+        }
+    }
+
+    protected function get_bulk_actions() {
+        $actions = array(
+            'delete' => 'Delete',
+            // 'approve' => 'Approve', // and so on
+        );
+
+        return $actions;
+    }
+
+    protected function process_bulk_action() {
+        // Check if a bulk action is triggered
+        $action = $this->current_action();
+
+        if ($action === 'delete') {
+            $selected_items = isset($_REQUEST['bulk-delete']) ? $_REQUEST['bulk-delete'] : array();
+
+            if (is_array($selected_items) && !empty($selected_items)) {
+                global $wpdb;
+                $table_name = $wpdb->prefix . 'ic_members';
+
+                foreach ($selected_items as $item_id) {
+                    $wpdb->delete(
+                        $table_name,
+                        array('id' => $item_id),
+                        array('%d')
+                    );
+                }
+            }
+        }
+        // TODO: need to redirect in the main page so it refresh automatically 
+    }
+
+    protected function column_delete($item) {
+        $actions = array(
+            'delete' => sprintf(
+                '<a href="?page=%s&action=%s&item=%s">Delete</a>',
+                esc_attr($_REQUEST['page']),
+                'delete',
+                absint($item['id'])
+            ),
+        );
+
+        return $this->row_actions($actions);
+    }
+
+    // protected function bulk_actions() {
+    //     $actions = array(
+    //         'delete' => 'Delete',
+    //     );
+
+    //     return $actions;
+    // }
+
+    /**
+     * Delete a single row.
+     *
+     * @param int $item_id The ID of the row to delete.
+     */
+    protected function delete_item($item_id) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'ic_members';
+
+        // Perform the delete operation for the single item
+        $wpdb->delete(
+            $table_name,
+            array('id' => $item_id),
+            array('%d')
+        );
+    }
+
+    // ...
+
+    /**
+     * Generate the bulk actions dropdown.
+     *
+     * @return string The HTML for the bulk actions dropdown.
+     */
+    // protected function bulk_actions() {
+    //     $actions = array(
+    //         'delete' => 'Delete',
+    //     );
+
+    //     return $actions;
+    // }
+    
+    /**
+     * Get the table views.
+     *
+     * @return string The views HTML.
+     */
+    protected function get_views() {
+        // Build your views HTML here
+        $views = array(
+            'all'     => sprintf('<a href="%s" class="current">All</a>', 'admin.php?page=ic-register-users'),
+            'pending' => '<a href="#">Pending</a>',
+            'published' => '<a href="#">Published</a>',
+        );
+
+        $current_view = isset($_REQUEST['view']) ? sanitize_key($_REQUEST['view']) : 'all';
+
+        $html = '<ul class="subsubsub">';
+        foreach ($views as $view => $label) {
+            $class = ($current_view === $view) ? 'current' : '';
+            $html .= "<li><a href='#' class='$class'>$label</a> |</li>";
+        }
+        $html .= '</ul>';
+
+        return $html;
     }
 
     public function get_sortable_columns() {
         $sortable_columns = [
             'name'       => ['name', true],
+            'email'      => ['email', true],
+            'dob'        => ['dob', true],
             'created_at' => ['created_at', true],
         ];
 
@@ -78,7 +284,7 @@ class Subscribers_List_Table extends \WP_List_Table {
 
         $items = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM {$wpdb->prefix}ic_ic_members
+                "SELECT * FROM {$wpdb->prefix}ic_members
             ORDER BY {$args["orderby"]} {$args["order"]}
             LIMIT %d OFFSET %d",
                 $args["number"], $args["offset"] )
@@ -94,8 +300,8 @@ class Subscribers_List_Table extends \WP_List_Table {
         return (int) $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_ic_members " );
     }
 
-    public function column_cb( $item ) {
-        return "<input type='checkbox' value='{$item["id"]}'/>";
+    protected function column_cb( $item ) {
+        return '<input type="checkbox" name="bulk-delete[]" value="' . $item['id'] . '" />';
     }
 
     public function column_created_at( $item ) {
@@ -106,9 +312,17 @@ class Subscribers_List_Table extends \WP_List_Table {
     }
 
     public function column_name( $item ) {
+        $action = [];
+        $action['edit'] = sprintf(
+            '<a href="#">%1$s</a>', __('Edit')  
+        );
+        $action['delete'] = sprintf(
+            '<a href="#">%1$s</a>', __( 'Delete' )
+        );
         return sprintf(
-            '<strong>%s</strong>',
+            '<strong>%s</strong>%s',
             esc_attr( $item['name'] ),
+            $this->row_actions( $action ),
         );
     }
 

@@ -1,0 +1,17 @@
+{
+    "name": "anis/ic-steps-form",
+    "autoload": {
+        "psr-4": {
+            "Anis\\IcStepsForm\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "anisur2805",
+            "email": "anisur2805@gmail.com"
+        }
+    ],
+    "require": {
+        "codesvault/howdy-qb": "@dev"
+    }
+}

@@ -1,8 +1,6 @@
 <?php
 
-function icsf_formHandler( $user_id ) {
-
-    if ( isset( $_POST['submit'] ) ) {
+function formHandler( $user_id ) {
 
         $name                           = sanitize_text_field( $_POST['name'] );
         $email                          = sanitize_text_field( $_POST['email'] );
@@ -46,7 +44,6 @@ function icsf_formHandler( $user_id ) {
         $trade = ic_upload_file( 'trade' );
         $cv    = ic_upload_file( 'cv' );
 
-        // var_dump($photo);
 
         // if( ! wp_verify_nonce( $_POST['nonce'], 'form-nonce' ) ) {
         //     wp_send_json_error([
@@ -148,14 +145,27 @@ function icsf_formHandler( $user_id ) {
         );
 
         // echo $id . ' insert id';
-    }
 
 }
 
-// add_action( 'wp_ajax_icsf_formHandler', 'icsf_formHandler' );
-// add_action( 'wp_ajax_nopriv_icsf_formHandler', 'icsf_formHandler' );
+add_action( 'wp_ajax_formHandler', 'formHandler' );
+add_action( 'wp_ajax_nopriv_formHandler', 'formHandler' );
 
-add_action( 'user_register', 'icsf_formHandler' );
+add_action( 'wp_ajax_helloWorld', 'helloWorld' );
+add_action( 'wp_ajax_nopriv_helloWorld', 'helloWorld' );
+function helloWorld(){
+    
+    echo '<pre>';
+          print_r( $_POST );
+          print_r( $_FILES );
+    echo '</pre>';
+    // $test = 'hello world';
+    // wp_send_json( $test );
+   wp_send_json_success();
+//    wp_die();
+}
+
+// add_action( 'user_register', 'icsf_formHandler' );
 add_action( 'init', 'ic_register_user' );
 function ic_register_user() {
 
@@ -908,3 +918,47 @@ function ic_update_user(){
 
     }
 }
+
+function ic_member_count() {
+    global $wpdb;
+
+    return $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_members" );
+}
+
+function ic_retrieve_data( $args = [] ) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'ic_members';
+
+    $defaults = [
+        'number'    => 20,
+        'offset'    => 0,
+        'orderby'   => 'id',
+        'order'     => 'ASC',
+        's'    => '',
+    ];
+
+    $args  = wp_parse_args( $args, $defaults );
+
+    $where = ''; // Placeholder for the WHERE clause
+
+    // Check if a search keyword is provided
+    if ( ! empty( $args['s'] ) ) {
+        $keyword = '%' . $wpdb->esc_like( $args['s'] ) . '%';
+        $where = $wpdb->prepare( "WHERE name LIKE %s OR email LIKE %s", $keyword, $keyword );
+    }
+
+    $items = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * from $table_name
+            $where
+            ORDER BY {$args['orderby']} {$args['order']}
+            LIMIT %d, %d",
+            $args['offset'], $args['number']
+        ), ARRAY_A
+    );
+
+    // echo $wpdb->last_query;
+
+    return $items;
+}
+
