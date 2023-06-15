@@ -10,8 +10,5 @@
             "name": "anisur2805",
             "email": "anisur2805@gmail.com"
         }
-    ],
-    "require": {
-        "codesvault/howdy-qb": "@dev"
-    }
+    ]
 }
