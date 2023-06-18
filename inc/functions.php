@@ -499,7 +499,7 @@ function icsf_user_message() {
             wp_die('Invalid nonce. Form submission not allowed.');
         }
 
-        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] );
+        $message_subject = sanitize_text_field( $_POST['ic_user_message_subject'] ) . '<br/>';
         $message         = $_POST['ic_user_message'];
 
         $allowed_html = [
