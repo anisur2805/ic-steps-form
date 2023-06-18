@@ -1,6 +1,6 @@
 'use strict';
 
-const form = $('#example-form');
+const form = $('#ic-steps-form');
 
 form.validate({
     errorPlacement: function errorPlacement(error, element) {
@@ -10,8 +10,15 @@ form.validate({
         confirm: {
             equalTo: "#password"
         },
-        isMarried: "required"
-    }
+        isMarried:{
+            required: true,
+        },
+    },
+    messages: {
+        isMarried:{
+            required: "Please select married status",
+        }
+    },
 });
 
 // Set message for conform password
@@ -24,24 +31,13 @@ form.steps({
     bodyTag: 'section',
     transitionEffect: 'fade',
     titleTemplate: '<span class="step">#index#</span> #title#',
-    onStepChanging: function (event, currentIndex, newIndex)
-    {
-        
-        if( newIndex == 3 ) {
-            var married = $('select[name="isMarried"]');
-            var marriedWrapper = $('.is-married-col');
-        
-            if (married.val() == '0') {
-                marriedWrapper.addClass('error');
-            }
-        
-            if (married.val() !== '0') {
-                marriedWrapper.removeClass('error');
-            }
-        }
-        
+    onStepChanging: function (event, currentIndex, newIndex) {       
         form.validate().settings.ignore = ":disabled,:hidden";
         return form.valid();
+    },
+    onFinishing: function( event, currentIndex ) {
+        form.validate().settings.ignore = ":disabled";
+		return form.valid();
     },
     onFinished: function (event, currentIndex) {
     },
@@ -90,21 +86,35 @@ $(document).ready(function() {
 });
 
 
-$('select[name="isMarried"]').on('change', function(){
-    
+// Phone number validation
+(function birthDateValidate() {
+    var businessPhoneNumberInput = document.querySelector('input[name="business-phone"]');
+    var phoneNumberInput         = document.querySelector('input[name="phone"]');   
+
+    // Define the input event listener function
+    const inputEventListener = function() {
+    // Remove any non-numeric characters except '+'
+    this.value = this.value.replace(/[^0-9+]/g, '');
+    };
+
+    // Add input event listener to businessPhoneNumberInput
+    businessPhoneNumberInput.addEventListener('input', inputEventListener);
+
+    // Add input event listener to phoneNumberInput
+    phoneNumberInput.addEventListener('input', inputEventListener);
+})();
+
+
+$(document).on('change', 'select[name="isMarried"]', function() {
     var selectedValue = $(this).val();
-
-    if (selectedValue !== '0') {
-        $(this).parent('.is-married-col').removeClass('error');
-    }
-
     if (selectedValue === '1') {
-        $('.condition-1').show()
+      $('.condition-1').show();
     } else {
-        $('.condition-1').hide()
-        $('.condition-2').hide()
+      $('.condition-1').hide();
+      $('.condition-2').hide();
     }
-})
+  });
+  
 
 $('select[name="have-children"]').on('change', function () {
     var selectedValue = $(this).val()
@@ -113,6 +123,4 @@ $('select[name="have-children"]').on('change', function () {
     } else {
         $('.condition-2').hide()
     }
-})
-
-
+});
