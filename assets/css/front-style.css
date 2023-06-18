@@ -289,7 +289,7 @@
     background: #ddd;
     border-radius: 4px;
     /* display: block; */
-    margin: 0 auto 10px;
+    /* margin: 0 auto 10px; */
     width: fit-content;
 }
 .show-reg-msg p {
@@ -358,27 +358,48 @@
 } 
 
 .ic-membership-form .ic-form input[type=number] {
-  -moz-appearance: textfield;
+  /* -moz-appearance: textfield; */
 }
 
+#isMarried-error {
+    display: none;
+    color: #f00;
+}
+#isMarried-error,
 .ic-membership-form .ic-form .error .form-control {
     border-color: #f00;
 }
 
 
+.ic-membership-form .is-married-col.error #isMarried-error {
+    display: inline-block !important;
+}
 
-
-
+body.ica-loading {
+    position: relative;
+}
+body.ica-loading::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,.45);
+    z-index: 99999;
+}
 .show-reg-msg {
-    top: 90px;
     z-index: 9999999;
     visibility: hidden;
     text-align: center;
     padding: 16px;
     position: fixed;
-    right: 5px;
+    left: 20px;
     font-size: 17px;
     border-radius: 6px;
+    bottom: 20px;
+    /* transform: translate(-50%, -100px); */
 }
 
 .show-reg-msg.success-reg-msg {
@@ -398,13 +419,13 @@
 }
 
 @-webkit-keyframes fadein {
-  from {top: 0; opacity: 0;} 
-  to {top: 30px; opacity: 1;}
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 20px; opacity: 1;}
 }
 
 @keyframes fadein {
-  from {top: 0;opacity: 0;}
-  to {top: 30px;opacity: 1;}
+  from {bottom: 0;opacity: 0;}
+  to {bottom: 20px;opacity: 1;}
 }
 
 

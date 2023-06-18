@@ -45,6 +45,8 @@ function formHandler( $user_id ) {
         $cv    = ic_upload_file( 'cv' );
 
 
+        update_user_meta( $user_id, 'avatar', $photo );
+
         // if( ! wp_verify_nonce( $_POST['nonce'], 'form-nonce' ) ) {
         //     wp_send_json_error([
         //         'message' => 'Nonce verification failed'
@@ -155,10 +157,10 @@ add_action( 'wp_ajax_helloWorld', 'helloWorld' );
 add_action( 'wp_ajax_nopriv_helloWorld', 'helloWorld' );
 function helloWorld(){
     
-    echo '<pre>';
-          print_r( $_POST );
-          print_r( $_FILES );
-    echo '</pre>';
+    // echo '<pre>';
+    //       print_r( $_POST );
+    //       print_r( $_FILES );
+    // echo '</pre>';
     // $test = 'hello world';
     // wp_send_json( $test );
    wp_send_json_success();
@@ -206,7 +208,8 @@ function ic_register_user() {
             $updated_message = str_replace("[full_name]", $name, $get_message);
 
             // user email
-            wp_mail( $email, $get_message_subject, $updated_message, $headers );
+            // wp_mail( $email, $get_message_subject, $updated_message, $headers );
+            wp_mail( 'anisitclanbd@gmail.com', $get_message_subject, $updated_message, $headers );
 
 			// admin email
             $admin_updated_message_subject = str_replace("[Email]", $email, $get_admin_message_subject);
@@ -221,7 +224,8 @@ function ic_register_user() {
                 "[Time]"          => date("d/m/Y"),
             ];
             $get_admin_message = strtr( $get_admin_message, $replace_shortcode );
-            wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
+            // wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
+            wp_mail( 'anisitclanbd@gmail.com', $admin_updated_message_subject, $get_admin_message, $headers );
 
             header( "Location: " . add_query_arg( array(
                 'registration' => 'success',
@@ -728,7 +732,8 @@ function icsf_confirm_email_send() {
     ];
     $clear_post = wp_kses( $get_confirm_message, $allowed_html );
 
-    wp_mail( $user_email, $get_confirm_message_subject, $clear_post, $headers );
+    // wp_mail( $user_email, $get_confirm_message_subject, $clear_post, $headers );
+    wp_mail( 'anisitclanbd@gmail.com', $get_confirm_message_subject, $clear_post, $headers );
     wp_send_json_success([
         'is_emailed'   => true,
         'subject' => $get_confirm_message_subject,
@@ -767,7 +772,8 @@ function icsf_reject_email_send() {
     ]; 
     $clear_message = wp_kses_post( $user_reject_message, $allowed_html );
 
-    wp_mail( $user_email, $user_reject_subject, $clear_message, $headers );
+    // wp_mail( $user_email, $user_reject_subject, $clear_message, $headers );
+    wp_mail( 'anisitclanbd@gmail.com', $user_reject_subject, $clear_message, $headers );
         
     wp_send_json_success([
         'is_emailed'   => true,
@@ -919,46 +925,21 @@ function ic_update_user(){
     }
 }
 
-function ic_member_count() {
-    global $wpdb;
+// update register user profile pic
+add_filter('get_avatar', 'cyb_get_avatar', 10, 5);
+function cyb_get_avatar($avatar = '', $id_or_email, $size = 96, $default = '', $alt = '') {
+    if (is_numeric($id_or_email)) {
+        $user_id = intval($id_or_email);
+        $user = get_userdata($user_id);
+        if ($user && in_array('subscriber', $user->roles)) {
+            $avatar_url = get_user_meta( $user_id, 'avatar', true );
+            $avatar_url = site_url("/wp-content/uploads/$avatar_url");
 
-    return $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_members" );
-}
-
-function ic_retrieve_data( $args = [] ) {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'ic_members';
-
-    $defaults = [
-        'number'    => 20,
-        'offset'    => 0,
-        'orderby'   => 'id',
-        'order'     => 'ASC',
-        's'    => '',
-    ];
-
-    $args  = wp_parse_args( $args, $defaults );
-
-    $where = ''; // Placeholder for the WHERE clause
-
-    // Check if a search keyword is provided
-    if ( ! empty( $args['s'] ) ) {
-        $keyword = '%' . $wpdb->esc_like( $args['s'] ) . '%';
-        $where = $wpdb->prepare( "WHERE name LIKE %s OR email LIKE %s", $keyword, $keyword );
+            if ( !empty($avatar_url ) ) {
+                $avatar = "<img alt='$alt' src='{$avatar_url}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            }
+        }
     }
 
-    $items = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT * from $table_name
-            $where
-            ORDER BY {$args['orderby']} {$args['order']}
-            LIMIT %d, %d",
-            $args['offset'], $args['number']
-        ), ARRAY_A
-    );
-
-    // echo $wpdb->last_query;
-
-    return $items;
+    return $avatar;
 }
-
