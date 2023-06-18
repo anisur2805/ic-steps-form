@@ -31,7 +31,7 @@ class Subscribers_List_Table extends \WP_List_Table {
             'status'              => __( '<strong>Status</strong>', 'founders-club' ),
             'photo'               => __( '<strong>Photo</strong>', 'founders-club' ),
             'view'                => __( '<strong>Action</strong>', 'founders-club' ),
-            'delete'                => __( '<strong>column_delete</strong>', 'founders-club' ),
+            // 'delete'                => __( '<strong>column_delete</strong>', 'founders-club' ),
         );
 
         return $columns;
@@ -297,7 +297,7 @@ class Subscribers_List_Table extends \WP_List_Table {
     public function itc_subscribers_count() {
         global $wpdb;
 
-        return (int) $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_ic_members " );
+        return (int) $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_members " );
     }
 
     protected function column_cb( $item ) {

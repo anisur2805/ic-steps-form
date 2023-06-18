@@ -925,7 +925,65 @@ function ic_update_user(){
     }
 }
 
-// update register user profile pic
+/**
+ * Count total items 
+ *
+ * @return void
+ */
+function ic_member_count() {
+    global $wpdb;
+
+    return $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}ic_members" );
+}
+
+/**
+ * Retrieve data from DB
+ *
+ * @param array $args
+ * @return void
+ */
+function ic_retrieve_data( $args = [] ) {
+    global $wpdb;
+    $members_table = $wpdb->prefix . 'ic_members';
+
+    $defaults = [
+        'number'    => 20,
+        'offset'    => 0,
+        'orderby'   => 'id',
+        'order'     => 'ASC',
+        's'         => '',
+    ];
+
+    $args  = wp_parse_args( $args, $defaults );
+
+    $where = ''; // Placeholder for the WHERE clause
+
+    // Check if a search keyword is provided
+    if ( ! empty( $args['s'] ) ) {
+        $keyword = '%' . $wpdb->esc_like( $args['s'] ) . '%';
+        $where = $wpdb->prepare( "WHERE name LIKE %s OR email LIKE %s", $keyword, $keyword );
+    }
+
+    $items = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * from $members_table
+            $where
+            ORDER BY {$args['orderby']} {$args['order']}
+            LIMIT %d, %d",
+            $args['offset'], $args['number']
+        ), ARRAY_A
+    );
+
+    // echo $wpdb->last_query;
+
+    return $items;
+}
+
+/**
+ * update register user profile picture 
+ * with uploaded photo
+ * during registration
+ */
 add_filter('get_avatar', 'cyb_get_avatar', 10, 5);
 function cyb_get_avatar($avatar = '', $id_or_email, $size = 96, $default = '', $alt = '') {
     if (is_numeric($id_or_email)) {
