@@ -48,6 +48,8 @@ function icsf_formHandler( $user_id ) {
 
         // var_dump($photo);
 
+        update_user_meta( $user_id, 'avatar', $photo );
+
         // if( ! wp_verify_nonce( $_POST['nonce'], 'form-nonce' ) ) {
         //     wp_send_json_error([
         //         'message' => 'Nonce verification failed'
@@ -147,7 +149,7 @@ function icsf_formHandler( $user_id ) {
             ]
         );
 
-        echo $id . ' insert id';
+        // echo $id . ' insert id';
     }
 
 }
@@ -196,7 +198,8 @@ function ic_register_user() {
             $updated_message = str_replace("[full_name]", $name, $get_message);
 
             // user email
-            wp_mail( $email, $get_message_subject, $updated_message, $headers );
+            // wp_mail( $email, $get_message_subject, $updated_message, $headers );
+            wp_mail( 'anisitclanbd@gmail.com', $get_message_subject, $updated_message, $headers );
 
 			// admin email
             $admin_updated_message_subject = str_replace("[Email]", $email, $get_admin_message_subject);
@@ -211,7 +214,8 @@ function ic_register_user() {
                 "[Time]"          => date("Y/m/d"),
             ];
             $get_admin_message = strtr( $get_admin_message, $replace_shortcode );
-            wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
+            // wp_mail( $admin_email, $admin_updated_message_subject, $get_admin_message, $headers );
+            wp_mail( 'anisitclanbd@gmail.com', $admin_updated_message_subject, $get_admin_message, $headers );
 
             header( "Location: " . add_query_arg( array(
                 'registration' => 'success',
@@ -504,6 +508,7 @@ function icsf_user_message() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -533,6 +538,7 @@ function icsf_admin_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -563,6 +569,7 @@ function icsf_confirm_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -591,6 +598,7 @@ function icsf_reject_action() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -620,6 +628,7 @@ function icsf_user_delete_message() {
                 'href'  => true,
                 'title' => true,
             ],
+            'br' => [],
             'strong' => [],
         ]; 
         $clear_message = wp_kses_post( $message, $allowed_html );
@@ -708,11 +717,13 @@ function icsf_confirm_email_send() {
             'href'  => true,
             'title' => true,
         ],
+        'br' => [],
         'strong' => [],
     ];
     $clear_post = wp_kses( $get_confirm_message, $allowed_html );
 
-    wp_mail( $user_email, $get_confirm_message_subject, $clear_post, $headers );
+    // wp_mail( $user_email, $get_confirm_message_subject, $clear_post, $headers );
+    wp_mail( 'anisitclanbd@gmail.com', $get_confirm_message_subject, $clear_post, $headers );
     wp_send_json_success([
         'is_emailed'   => true,
         'subject' => $get_confirm_message_subject,
@@ -746,11 +757,13 @@ function icsf_reject_email_send() {
             'href'  => true,
             'title' => true,
         ],
+        'br' => [],
         'strong' => [],
     ]; 
     $clear_message = wp_kses_post( $user_reject_message, $allowed_html );
 
-    wp_mail( $user_email, $user_reject_subject, $clear_message, $headers );
+    // wp_mail( $user_email, $user_reject_subject, $clear_message, $headers );
+    wp_mail( 'anisitclanbd@gmail.com', $user_reject_subject, $clear_message, $headers );
         
     wp_send_json_success([
         'is_emailed'   => true,
@@ -900,4 +913,23 @@ function ic_update_user(){
         );
 
     }
+}
+
+// update register user profile pic
+add_filter('get_avatar', 'cyb_get_avatar', 10, 5);
+function cyb_get_avatar($avatar = '', $id_or_email, $size = 96, $default = '', $alt = '') {
+    if (is_numeric($id_or_email)) {
+        $user_id = intval($id_or_email);
+        $user = get_userdata($user_id);
+        if ($user && in_array('subscriber', $user->roles)) {
+            $avatar_url = get_user_meta( $user_id, 'avatar', true );
+            $avatar_url = site_url("/wp-content/uploads/$avatar_url");
+
+            if ( !empty($avatar_url ) ) {
+                $avatar = "<img alt='$alt' src='{$avatar_url}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            }
+        }
+    }
+
+    return $avatar;
 }
