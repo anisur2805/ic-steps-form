@@ -1,6 +1,8 @@
 <?php
 
-function formHandler( $user_id ) {
+function icsf_formHandler( $user_id ) {
+
+    if ( isset( $_POST['submit'] ) ) {
 
         $name                           = sanitize_text_field( $_POST['name'] );
         $email                          = sanitize_text_field( $_POST['email'] );
@@ -43,9 +45,6 @@ function formHandler( $user_id ) {
         $nid   = ic_upload_file( 'nid' );
         $trade = ic_upload_file( 'trade' );
         $cv    = ic_upload_file( 'cv' );
-
-
-        update_user_meta( $user_id, 'avatar', $photo );
 
         // if( ! wp_verify_nonce( $_POST['nonce'], 'form-nonce' ) ) {
         //     wp_send_json_error([
@@ -146,36 +145,25 @@ function formHandler( $user_id ) {
             ]
         );
 
+        update_user_meta( $user_id, 'avatar', $photo );
+
         // echo $id . ' insert id';
 
+    }
 }
 
-add_action( 'wp_ajax_formHandler', 'formHandler' );
-add_action( 'wp_ajax_nopriv_formHandler', 'formHandler' );
+// add_action( 'wp_ajax_formHandler', 'formHandler' );
+// add_action( 'wp_ajax_nopriv_formHandler', 'formHandler' );
 
-add_action( 'wp_ajax_helloWorld', 'helloWorld' );
-add_action( 'wp_ajax_nopriv_helloWorld', 'helloWorld' );
-function helloWorld(){
-    
-    // echo '<pre>';
-    //       print_r( $_POST );
-    //       print_r( $_FILES );
-    // echo '</pre>';
-    // $test = 'hello world';
-    // wp_send_json( $test );
-   wp_send_json_success();
-//    wp_die();
-}
-
-// add_action( 'user_register', 'icsf_formHandler' );
+add_action( 'user_register', 'icsf_formHandler' );
 add_action( 'init', 'ic_register_user' );
 function ic_register_user() {
 
-    if( is_admin() ) {
-        return;
-    }
-
-    if ( isset( $_POST['submit'] ) ) {
+    // if( is_admin() ) {
+    //     return;
+    // }
+    
+    if ( isset( $_POST['submit'] ) ) {            
 
         // $nonce = isset( $_POST['_wpnonce'] ) ? $_POST['_wpnonce'] : '';
 
@@ -193,6 +181,8 @@ function ic_register_user() {
 		$business_name      = sanitize_text_field( $_POST['business-name'] );
 		$phone              = sanitize_text_field( $_POST['phone'] );
         $user_id            = username_exists( $email );
+
+
 
         if ( ! $user_id && false == email_exists( $email ) ) {
             $user_id = wp_create_user( $email, $password, $email );
@@ -984,17 +974,17 @@ function ic_retrieve_data( $args = [] ) {
  * with uploaded photo
  * during registration
  */
-add_filter('get_avatar', 'cyb_get_avatar', 10, 5);
-function cyb_get_avatar($avatar = '', $id_or_email, $size = 96, $default = '', $alt = '') {
+add_filter('get_avatar', 'cyb_get_avatar1', 10, 5);
+function cyb_get_avatar1($avatar, $id_or_email, $size, $default, $alt) {
     if (is_numeric($id_or_email)) {
         $user_id = intval($id_or_email);
         $user = get_userdata($user_id);
         if ($user && in_array('subscriber', $user->roles)) {
-            $avatar_url = get_user_meta( $user_id, 'avatar', true );
-            $avatar_url = site_url("/wp-content/uploads/$avatar_url");
+            $avatar_url = get_user_meta($user_id, 'avatar', true);
+            $avatar_url = wp_get_upload_dir()['baseurl'] . '/' . $avatar_url;
 
-            if ( !empty($avatar_url ) ) {
-                $avatar = "<img alt='$alt' src='{$avatar_url}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            if (!empty($avatar_url)) {
+                $avatar = "<img alt='$alt' src='$avatar_url' class='avatar avatar-$size photo' height='$size' width='$size' />";
             }
         }
     }

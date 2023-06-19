@@ -15,9 +15,13 @@
 if ( !defined( 'ABSPATH' ) ) {
  exit;
 }
+
+add_action('wp', function() {
+    
 if( ! is_admin() ) {
     session_start();
 }
+}, 1);
 
 if ( !defined( 'ICSF_VERSION' ) ) {
  define( 'ICSF_VERSION', '1.1' );

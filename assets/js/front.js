@@ -16,14 +16,14 @@ form.validate({
     },
     messages: {
         isMarried:{
-            required: "Please select married status",
+            required: "Please select marital status",
         }
     },
 });
 
 // Set message for conform password
 $.extend($.validator.messages, {
-    equalTo: "Enter same password"
+    equalTo: "Password do not match"
 });
 
 form.steps({
@@ -120,7 +120,24 @@ $('select[name="have-children"]').on('change', function () {
     var selectedValue = $(this).val()
     if (selectedValue === '1') {
         $('.condition-2').show()
+        $('.have_second_child').show()
     } else {
         $('.condition-2').hide()
+        $('.have_second_child').hide()
+        $('.conditional_child').hide()
+        $('.condition-3').hide()
+        $('.condition-4').hide()
     }
+});
+
+$('.have_second_child i').on('click', function () {
+    // var selectedValue = $(this).val()
+    $('.condition-3').show()
+    $('.have_third_child').show()
+});
+
+$('.have_third_child i').on('click', function () {
+    // var selectedValue = $(this).val()
+    $('.condition-4').show()
+    // $('.have_second_child').show()
 });

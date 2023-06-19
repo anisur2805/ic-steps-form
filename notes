@@ -1,0 +1,59 @@
+<div class="ic-navbar-login-reg">
+
+                    <?php if( is_user_logged_in() ): ?>
+
+                        <?php 
+                             $current_user = wp_get_current_user();
+                             $display_name = esc_html($current_user->display_name);
+                             $user_email   = sanitize_email($current_user->user_email);
+                             $user_avatar  = get_avatar($current_user->ID);
+                             $profile_url  = esc_url(get_edit_profile_url($current_user->ID));
+
+                        ?>
+                        <div class="ic-navbar-logged-in ic-navbar-logged-out">
+                            <div class="ic-navbar-login">
+                                <a class="ic-btn"><i class="ri-user-line icon-left"></i></a>
+                            </div>
+                            <ul class="ic-user-dropdown">
+                                <li>
+                                    <div>
+                                        <?php echo $user_avatar; ?>
+                                        <span>
+                                            <h3><?php echo $display_name; ?></h3>
+                                            <p><?php echo $user_email; ?></p>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li><a href="<?php echo $profile_url; ?>"><i class="ri-user-line"></i> My Profile</a></li>
+                                <li><a href="<?php echo wp_logout_url(); ?>"><i class="ri-login-box-line"></i> Logout</a></li>
+                            </ul>
+                        </div>
+
+                    <?php else: ?>
+                    
+                    <div class="ic-navbar-login">
+                        <a href="https://duckbd.com/fccl/login" class="ic-btn"><i class="ri-user-add-line icon-left"></i><?php _e('Member Login', 'founders-club') ?></a>
+                    </div>
+                    <?php endif; ?>
+
+                    <div class="ic-mobile-login-dropdown">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ri-user-add-line"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Member Login</a></li>
+                                <li><a class="dropdown-item" href="#">Register</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ic-mobile-menu-icon">
+                        <a href="javascript:void(0)" class="ic-mobile-menu-open">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </a>
+                    </div>
+
+                </div>
