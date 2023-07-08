@@ -178,12 +178,12 @@ table.table-view-list.subscribers .show-more-action .ic-action-button-wrapper {
 }
 
 table.table-view-list.subscribers td span {
-    display: block;
+    /* display: block; */
 }
 
 table.table-view-list.subscribers td span {
-    display: block;
-    font-weight: 500;
+    /* display: block; */
+    /* font-weight: 500; */
 }
 
 table.table-view-list.subscribers td span.success {
@@ -197,8 +197,8 @@ table.table-view-list.subscribers .icsf-delete-user {
     color: #f00;
 }
 
-table.table-view-list.subscribers td button,
-table.table-view-list.subscribers td a, 
+table.table-view-list.subscribers td button:not(.toggle-row),
+table.table-view-list.subscribers td a.btn,
 table.table-view-list.subscribers td select {
     border: 1px solid #ddd !important;
     padding:  5px;

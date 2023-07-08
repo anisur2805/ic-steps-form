@@ -649,11 +649,23 @@ ul.ic-user-dropdown {
     transition: all 0.3s;
 }
 
+.ic-navbar-logged-out.active-dropdown ul.ic-user-dropdown,
 .ic-navbar-logged-out:hover ul.ic-user-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0px);
 }
+
+@media (max-width: 991px) {
+    .ic-navbar-logged-out.active-dropdown ul.ic-user-dropdown{
+        transform: translateY(15px);
+    }
+
+    ul.ic-user-dropdown {
+        transform: translateY(25px);
+    }
+}
+
 
 ul.ic-user-dropdown li a {
     padding: 10px 20px;
@@ -695,4 +707,9 @@ ul.ic-user-dropdown li:first-child {
     padding-bottom: 10px;
     margin-bottom: 10px;
     padding-top: 15px;
+}
+
+
+#ui-datepicker-div {
+    z-index: 11 !important;
 }

@@ -15,40 +15,40 @@ class Subscribers_List_Table extends \WP_List_Table {
             'plural'   => 'subscribers',
             'ajax'     => false,
         ] );
-        add_action( 'admin_head', [$this, 'add_custom_screen_options' ] );
+        add_action( 'admin_head', [$this, 'add_custom_screen_options'] );
 
     }
 
     public function get_columns() {
-        $columns = array(
-            'cb'                  => __( '<input type="checkbox" />', 'founders-club' ),
-            'name'                => __( '<strong>Name</strong>', 'founders-club' ),
-            'email'               => __( '<strong>Email</strong>', 'founders-club' ),
-            'created_at'          => __( '<strong>Create Date</strong>', 'founders-club' ),
-            'membership_type'     => __( '<strong>Member Type</strong>', 'founders-club' ),
-            'dob'                 => __( '<strong>DOB</strong>', 'founders-club' ),
+        $columns = [
+            'cb'              => __( '<input type="checkbox" />', 'founders-club' ),
+            'name'            => __( '<strong>Name</strong>', 'founders-club' ),
+            'email'           => __( '<strong>Email</strong>', 'founders-club' ),
+            'created_at'      => __( '<strong>Create Date</strong>', 'founders-club' ),
+            'membership_type' => __( '<strong>Member Type</strong>', 'founders-club' ),
+            'dob'             => __( '<strong>DOB</strong>', 'founders-club' ),
             // 'phone'               => __( '<strong>Mobile No.</strong>', 'founders-club' ),
-            'status'              => __( '<strong>Status</strong>', 'founders-club' ),
-            'photo'               => __( '<strong>Photo</strong>', 'founders-club' ),
-            'view'                => __( '<strong>Action</strong>', 'founders-club' ),
+            'status'          => __( '<strong>Status</strong>', 'founders-club' ),
+            'photo'           => __( '<strong>Photo</strong>', 'founders-club' ),
+            'view'            => __( '<strong>Action</strong>', 'founders-club' ),
             // 'delete'                => __( '<strong>column_delete</strong>', 'founders-club' ),
-        );
+        ];
 
         return $columns;
     }
 
     public function add_custom_screen_options() {
         die( 'die here' );
-        error_log('add_custom_screen_options() method called'); 
+        error_log( 'add_custom_screen_options() method called' );
         $screen = get_current_screen();
 
         // Add screen options only for your WP List Table admin page
         if ( $screen->id === 'toplevel_page_ic-register-users' ) {
             $option = 'per_page'; // Option key
-            $args = [
+            $args   = [
                 'label'   => 'Items per page', // Label for the screen option
                 'default' => 20, // Default value
-                'option'  => 'custom_items_per_page' // Custom option name (optional)
+                'option'  => 'custom_items_per_page', // Custom option name (optional)
             ];
             add_screen_option( $option, $args );
 
@@ -67,18 +67,18 @@ class Subscribers_List_Table extends \WP_List_Table {
      * Handles data query and filter, sorting, and pagination.
      */
     public function prepare_items() {
-        $column     = $this->get_columns();
-        $hidden     = [];
-        $sortable   = $this->get_sortable_columns();
+        $column   = $this->get_columns();
+        $hidden   = [];
+        $sortable = $this->get_sortable_columns();
         $primary  = 'name';
 
-        $this->_column_headers = [ $column, $hidden, $sortable, $primary ];
+        $this->_column_headers = [$column, $hidden, $sortable, $primary];
 
         $per_page     = 2;
         $current_page = $this->get_pagenum();
         $offset       = ( $current_page - 1 ) * $per_page;
 
-        $search = isset($_REQUEST['s']) ? sanitize_text_field($_REQUEST['s']) : '';
+        $search = isset( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : '';
 
         $args = [
             'number' => $per_page,
@@ -86,7 +86,7 @@ class Subscribers_List_Table extends \WP_List_Table {
             's'      => $search,
         ];
 
-        if( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
+        if ( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
             $args['orderby'] = $_REQUEST['orderby'];
             $args['order']   = $_REQUEST['order'];
         }
@@ -98,100 +98,53 @@ class Subscribers_List_Table extends \WP_List_Table {
             'per_page'    => $per_page,
         ] );
 
-        if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['bulk-action-submit'] ) ) {
-            $this->process_bulk_action();
-        }
-    }
-
-    public function extra_tablenav($which) {
-        if ($which === 'top') {
-            $search_text = isset($_REQUEST['s']) ? esc_attr($_REQUEST['s']) : '';
-            ?>
-            <div class="alignleft actions">
-                <form method="get">
-                    <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
-                    <?php $this->search_box('Search', 'search_id', $search_text); ?>
-                </form>
-            </div>
-            <?php
-        }
-    }
-
-    /**
-     * Display the table navigation.
-     *
-     * @param string $which The position of the navigation (top/bottom).
-     */
-    protected function display_tablenav($which) {
-        if ($which === 'top') {
-            // Call get_views to retrieve the views HTML
-            $views = $this->get_views();
-
-            if (!empty($views)) {
-                ?>
-                <div class="tablenav <?php echo esc_attr($which); ?>">
-                    <div class="alignleft actions">
-                        <h2 class="screen-reader-text"><?php esc_html_e('Filter by', 'text-domain'); ?></h2>
-                        <?php echo $views; ?>
-                    </div>
-                    <?php //$this->pagination('top'); ?>
-                </div>
-                <?php
-            }
-        }
-
-        // Call the parent method to display the table navigation
-        parent::display_tablenav($which);
-
-        // Trigger the form submission
-        if ($which === 'bottom') {
-            echo '<input type="hidden" name="bulk-action-submit" value="1" />';
-        }
+        $this->process_bulk_action();
     }
 
     protected function get_bulk_actions() {
-        $actions = array(
-            'delete' => 'Delete',
-            // 'approve' => 'Approve', // and so on
-        );
-
-        return $actions;
+        return [
+            'bulk-delete' => 'Delete',
+        ];
     }
 
     protected function process_bulk_action() {
-        // Check if a bulk action is triggered
         $action = $this->current_action();
 
-        if ($action === 'delete') {
-            $selected_items = isset($_REQUEST['bulk-delete']) ? $_REQUEST['bulk-delete'] : array();
+        if ( $action === 'bulk-delete' ) {
+            $selected_items = $_REQUEST['bulk-delete'] ?? [];
 
-            if (is_array($selected_items) && !empty($selected_items)) {
+            if ( is_array( $selected_items ) && !empty( $selected_items ) ) {
                 global $wpdb;
                 $table_name = $wpdb->prefix . 'ic_members';
 
-                foreach ($selected_items as $item_id) {
+                foreach ( $selected_items as $item_id ) {
                     $wpdb->delete(
                         $table_name,
-                        array('id' => $item_id),
-                        array('%d')
+                        [ 'id' => $item_id ],
+                        [ '%d' ],
                     );
+                    echo $wpdb->last_query;
                 }
             }
+
+            echo '<script>window.location.href = "' . admin_url( 'admin.php?page=ic-register-users' ) . '";</script>';
+            exit;
+
         }
-        // TODO: need to redirect in the main page so it refresh automatically 
+
     }
 
-    protected function column_delete($item) {
-        $actions = array(
+    protected function column_delete( $item ) {
+        $actions = [
             'delete' => sprintf(
                 '<a href="?page=%s&action=%s&item=%s">Delete</a>',
-                esc_attr($_REQUEST['page']),
+                esc_attr( $_REQUEST['page'] ),
                 'delete',
-                absint($item['id'])
+                absint( $item['id'] )
             ),
-        );
+        ];
 
-        return $this->row_actions($actions);
+        return $this->row_actions( $actions );
     }
 
     // protected function bulk_actions() {
@@ -207,15 +160,15 @@ class Subscribers_List_Table extends \WP_List_Table {
      *
      * @param int $item_id The ID of the row to delete.
      */
-    protected function delete_item($item_id) {
+    protected function delete_item( $item_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'ic_members';
 
         // Perform the delete operation for the single item
         $wpdb->delete(
             $table_name,
-            array('id' => $item_id),
-            array('%d')
+            [ 'id' => $item_id ],
+            [ '%d' ],
         );
     }
 
@@ -233,7 +186,7 @@ class Subscribers_List_Table extends \WP_List_Table {
 
     //     return $actions;
     // }
-    
+
     /**
      * Get the table views.
      *
@@ -241,17 +194,17 @@ class Subscribers_List_Table extends \WP_List_Table {
      */
     protected function get_views() {
         // Build your views HTML here
-        $views = array(
-            'all'     => sprintf('<a href="%s" class="current">All</a>', 'admin.php?page=ic-register-users'),
-            'pending' => '<a href="#">Pending</a>',
+        $views = [
+            'all'       => sprintf( '<a href="%s" class="current">All</a>', 'admin.php?page=ic-register-users' ),
+            'pending'   => '<a href="#">Pending</a>',
             'published' => '<a href="#">Published</a>',
-        );
+        ];
 
-        $current_view = isset($_REQUEST['view']) ? sanitize_key($_REQUEST['view']) : 'all';
+        $current_view = isset( $_REQUEST['view'] ) ? sanitize_key( $_REQUEST['view'] ) : 'all';
 
         $html = '<ul class="subsubsub">';
-        foreach ($views as $view => $label) {
-            $class = ($current_view === $view) ? 'current' : '';
+        foreach ( $views as $view => $label ) {
+            $class = ( $current_view === $view ) ? 'current' : '';
             $html .= "<li><a href='#' class='$class'>$label</a> |</li>";
         }
         $html .= '</ul>';
@@ -305,19 +258,19 @@ class Subscribers_List_Table extends \WP_List_Table {
     }
 
     public function column_created_at( $item ) {
-        $created_at = $item['created_at'];
+        $created_at     = $item['created_at'];
         $formatted_date = date( 'd-m-Y', strtotime( $created_at ) );
 
         return $formatted_date;
     }
 
     public function column_name( $item ) {
-        $action = [];
+        $action         = [];
         $action['edit'] = sprintf(
-            '<a href="#">%1$s</a>', __('Edit')  
+            '<a href="' . admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ) . '" >%s</a>', esc_attr( $item['user_id'] ), __( 'Edit' )
         );
         $action['delete'] = sprintf(
-            '<a href="#">%1$s</a>', __( 'Delete' )
+            '<a data-delete-id="%1$s" href="#">%2$s</a>', esc_attr( $item['user_id'] ), __( 'Delete' )
         );
         return sprintf(
             '<strong>%s</strong>%s',
@@ -332,7 +285,7 @@ class Subscribers_List_Table extends \WP_List_Table {
     // }
 
     public function column_membership_type( $item ) {
-        if ( isset( $item['membership_type'] ) && ! is_null( $item['membership_type'] ) ) {
+        if ( isset( $item['membership_type'] ) && !is_null( $item['membership_type'] ) ) {
             if ( $item['membership_type'] === '0' ) {
                 $type = 'Not Selected';
             } else {
@@ -342,7 +295,7 @@ class Subscribers_List_Table extends \WP_List_Table {
         } else {
             return '';
         }
-    }        
+    }
 
     public function column_view( $item ) {
         // echo '<pre>';
@@ -352,10 +305,10 @@ class Subscribers_List_Table extends \WP_List_Table {
         return sprintf(
             '<button type="button" class="view-more-btn">...</button><div class="ic-action-button-wrapper"><button type="button" class="icsf-send-confirm-email" data-id="%s" data-email="%s">Confirm Email</button>
             <button type="button" class="icsf-send-reject-email" data-id="%s" data-email="%s">Reject Email</button>
-            <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ).'" class="icsf-edit-user" data-id="%s">Edit User</a>
-            <a type="button" href="'.admin_url( 'admin.php?page=ic-register-users&action=view&id=%d' ).'" class="icsf-edit-user" data-id="%s">View User</a>
+            <a type="button" href="' . admin_url( 'admin.php?page=ic-register-users&action=edit&id=%d' ) . '" class="icsf-edit-user btn" data-id="%s">Edit User</a>
+            <a type="button" href="' . admin_url( 'admin.php?page=ic-register-users&action=view&id=%d' ) . '" class="icsf-edit-user btn" data-id="%s">View User</a>
             <button type="button" class="icsf-delete-user" data-delete-id="%s">Delete User</button>
-            <a href="%s" type="button" class="icsf-cv-download" download>CV Download</a></div>',
+            <a href="%s" type="button" class="icsf-cv-download btn" download>CV Download</a></div>',
             esc_attr( $item['user_id'] ),
             esc_attr( $item['email'] ),
             esc_attr( $item['user_id'] ),
@@ -370,25 +323,25 @@ class Subscribers_List_Table extends \WP_List_Table {
     }
 
     public function column_status( $item ) {
-        $status = $item['status'] == 0 ? 'Unpaid' : 'Paid';
+        $status       = $item['status'] == 0 ? 'Unpaid' : 'Paid';
         $status_class = $item['status'] == 1 ? 'success' : '';
-        $disabled = $item['status'] == 1 ? 'disabled' : '';
+        $disabled     = $item['status'] == 1 ? 'disabled' : '';
         global $wpdb;
         $table_name = $wpdb->prefix . 'ic_user_status';
 
-        if ( ! $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        if ( !$wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) == $table_name ) {
             return;
         }
 
         $query = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
-    
+
         $select = '<select class="status-dropdown">';
-        foreach ($query as $res) {
+        foreach ( $query as $res ) {
             $selected = ( $res['id'] == $item['status'] ) ? 'selected' : '';
-            $select .= '<option value="' . $res['id'] . '" '.$selected.'>' . $res['status'] . '</option>';
+            $select .= '<option value="' . $res['id'] . '" ' . $selected . '>' . $res['status'] . '</option>';
         }
         $select .= '</select>';
-        
+
         return sprintf(
             '%s
             <button %s type="button" class="icsf-update-user" data-update-id="%s"> Update Status</button>',
@@ -397,15 +350,15 @@ class Subscribers_List_Table extends \WP_List_Table {
             esc_attr( $item['user_id'] )
         );
     }
-    
+
 /*
 <a title="Click to Download" href="/images/myw3schoolsimage.jpg" download>
-  <img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142"> Click to Download
+<img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142"> Click to Download
 </a> */
 
     public function column_photo( $item ) {
         return sprintf(
-            '<a title="Click to Download" href="%s" download><img width="40" height="40" src="%s" /> Click to Download</a>',
+            '<a title="Click to Download" href="%s" class="btn" download><img width="40" height="40" src="%s" /> Click to Download</a>',
             site_url( 'wp-content/uploads' ) . $item['photo'],
             site_url( 'wp-content/uploads' ) . $item['photo'],
         );
@@ -416,7 +369,7 @@ class Subscribers_List_Table extends \WP_List_Table {
     }
 
     public function get_hidden_columns() {
-        return array();
+        return [];
     }
 
     public function column_default( $item, $column_name ) {

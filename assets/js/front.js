@@ -53,18 +53,6 @@ $(document).ready(function() {
         message.remove();
     }, 5000);
 
-
-
-    // $('.ic_dob').on('change', function() {
-    //     var dateVal = $(this).val();
-    //     var regex =  /^\d{2}-\d{2}-\d{4}$/;
-        
-    //     if (!regex.test(dateVal)) {
-    //         alert('Please enter a valid year!');
-    //         $(this).val(''); // Reset the input value
-    //     }
-    // });
-
     const selectors = ['.ic_dob', '.anniversary', '.first-kids-dob', '.second-kids-dob', '.third-kids-dob'];
     $(selectors.join(', ')).on('change', function() {
         const dateVal = $(this).val();
@@ -75,15 +63,79 @@ $(document).ready(function() {
             const currentDate = new Date();
 
             if (selectedDate.getFullYear() > currentDate.getFullYear()) {
-                alert('Please enter a year that is not greater than the current year!');
-                $(this).val(''); // Reset the input value
+                alert('Please enter a valid year!');
+                $(this).val('');
             }
         }
     });
 
-
+    
 
 });
+
+jQuery(document).ready(function($) {
+    const selectors = ['.ic_dob', '.anniversary', '.first-kids-dob', '.second-kids-dob', '.third-kids-dob'];
+    $(selectors.join(', ')).datepicker({
+        dateFormat: 'dd/mm/yy', // Set the desired date format
+        maxDate: 0, // Set the maximum date to the current date
+
+        beforeShow: function(input, inst) {
+            inst.dpDiv.addClass('custom-datepicker'); // Add a custom class to the datepicker
+        },
+
+        onSelect: function(dateText, inst) {
+            var selectedDate = $(this).datepicker('getDate');
+            var currentDate = new Date();
+
+            if (selectedDate > currentDate) {
+                alert('Please select a valid date.');
+                $(this).val('');
+            }
+
+            var year = selectedDate.getFullYear();
+            if (year.toString().length > 4) {
+                alert('Please enter a valid year (up to 4 digits).');
+                $(this).val('');
+            }
+        },
+        yearRange: 'c-100:c+10', // Set the range of years to display in the dropdown menu
+        changeYear: true, // Enable year selection
+    });
+
+    $('.ic_dob', '.anniversary', '.first-kids-dob', '.second-kids-dob', '.third-kids-dob').on('keyup', function(e) {
+        let userDate = e.target.value;
+        let currentDate = new Date();
+        let formatDate = currentDate.toLocaleDateString('en-GB')
+        if( userDate > formatDate ) {
+            alert('Please enter a valid date!');
+            $(this).val('');
+        }
+
+    });
+});
+
+
+// Click event listener for document
+$(document).on('click', function(event) {
+    var target = event.target;
+
+    var userDropdown = $('.ic-user-dropdown')[0];
+    var navbarLoggedOut = $('.ic-navbar-logged-out');
+  
+    // Check if the target element is not contained within the user dropdown
+    if (!userDropdown.contains(target)) {
+      navbarLoggedOut.removeClass('active-dropdown');
+    }
+  });
+  
+  // Click event listener for mobile login dropdown button
+  $('body').on('click', '.ic-mobile-login-dropdown button#dropdownMenuButton1', function(event) {
+    event.stopPropagation();
+    var navbarLoggedOut = $('.ic-navbar-logged-out');
+  
+    navbarLoggedOut.addClass('active-dropdown');
+  });
+  
 
 
 // Phone number validation
@@ -98,10 +150,13 @@ $(document).ready(function() {
     };
 
     // Add input event listener to businessPhoneNumberInput
-    businessPhoneNumberInput.addEventListener('input', inputEventListener);
-
+    if( businessPhoneNumberInput) {
+        businessPhoneNumberInput.addEventListener('input', inputEventListener);
+    }
     // Add input event listener to phoneNumberInput
-    phoneNumberInput.addEventListener('input', inputEventListener);
+    if( phoneNumberInput ) {
+        phoneNumberInput.addEventListener('input', inputEventListener);
+    }
 })();
 
 

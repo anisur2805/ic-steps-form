@@ -364,21 +364,22 @@ function display_single_user() {
 add_action('wp_ajax_icsf_delete_user', 'icsf_delete_user');
 add_action('wp_ajax_nopriv_icsf_delete_user', 'icsf_delete_user');
 function icsf_delete_user() {
-    $data_id = sanitize_key( $_POST['data_id'] ); ?>
-            
-    <?php
+    $data_id = sanitize_key( $_POST['data_id'] ); 
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'ic_members';
+        $users_table = $wpdb->prefix . 'users';
 
-        $query   = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}ic_members WHERE user_id = %d", $data_id);
+        $query   = $wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $data_id);
         $results = $wpdb->get_results($query);
-        $email   = $results[0]->email;
 
-        $wpdb->delete($wpdb->users, array('ID' => $data_id));
-        $wpdb->delete( $table_name, array('user_id' => $data_id));
+        // $email   = $results[0]->email;
+
+        $yes = $wpdb->delete( $users_table, array('ID' => $data_id));
+        $yes2 = $wpdb->delete( $table_name, array('user_id' => $data_id));
 
         $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-       
+
         $get_delete_message         = get_option('user_delete_message');
         $get_delete_message_subject = get_option('user_delete_message_subject');
 
@@ -387,7 +388,7 @@ function icsf_delete_user() {
         $user_subject = $get_delete_message_subject;
         // TODO: currently delete message is disable AR001
         // wp_mail( $email, $user_subject, $user_message, $headers );
-        
+
     ?>
 
     <?php

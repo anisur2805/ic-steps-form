@@ -97,6 +97,32 @@
             });
 
         });
+
+        // Ajax call for delete user based on click action delete button
+        $('body').on('click', 'table.subscribers .row-actions .delete a', function(e){
+            e.preventDefault();
+
+            if ( !confirm( myTableObjDelete.confirm ) ) {
+				return;
+			}
+
+            var self = $(this);
+            var data = {
+                data_id: $(this).data('delete-id'),
+                action: 'icsf_delete_user',
+            }
+            $.post(myTableObjDelete.ajaxUrl, data, function (response) {
+                self.closest("tr")
+                    .css("background-color", "red")
+                    .hide(400, function () {
+                        $(this).remove();
+                    });
+
+            }).fail(function (e) {
+                console.log(myTableObjDelete.error, e)
+            });
+
+        });
         
         // Ajax call for Update user status based on click `id`
         $('body').on('click', 'table.subscribers .icsf-update-user', function(e){

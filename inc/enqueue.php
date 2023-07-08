@@ -11,9 +11,12 @@ function ICSF_frontend_assets() {
 	wp_enqueue_style( 'icsf-vendor-css', ICSF_ASSETS . '/css/vendor-min.css', null, ICSF_VERSION, 'all' );
 	wp_enqueue_script( 'icsf-vendor-script', ICSF_ASSETS . '/js/vendor-min.js', ['jquery'], ICSF_VERSION, true );
 	wp_enqueue_style( 'icsf-frontend-style', ICSF_ASSETS . '/css/front-style.css', null, ICSF_VERSION, 'all' );
+    wp_enqueue_script( 'jquery-ui-datepicker' );
 	wp_register_script( 'jquery-validator', ICSF_ASSETS . '/js/jquery.validate.min.js', array( 'icsf-vendor-script' ), null, true );
-	wp_enqueue_script( 'icsf-frontend-script', ICSF_ASSETS . '/js/front.js', ['jquery', 'jquery-validator'], ICSF_VERSION, true );
+	wp_enqueue_script( 'icsf-frontend-script', ICSF_ASSETS . '/js/front.js', ['jquery', 'jquery-ui-datepicker', 'jquery-validator'], ICSF_VERSION, true );
 
+    wp_enqueue_style( 'jquery-ui-datepicker-style' , '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css');
+    
 	wp_localize_script( 'icsf-frontend-script', 'myObj', array(
 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'form-nonce' ),

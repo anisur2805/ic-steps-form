@@ -61,9 +61,135 @@
 
                 <p class="form-handler-message"></p>
                 <form enctype="multipart/form-data" method="post" id="ic-steps-form" class="tab-wizard wizard-circle">
+                    <!-- TODO 3 Step 3 -->
+                    <h6></h6>
+                    <section class="mb-30">
+                        <div class="row ">
+                            <div class="col-lg-6 mb-25">
+                                <label for="" class="form-label">Father's Name*</label>
+                                <textarea name="father-name" class="form-control required" placeholder="Father's Name"><?php echo $father; ?></textarea>
+                            </div>
+
+                            <div class="col-lg-6 mb-25">
+                                <label for="" class="form-label">Mother's Name*</label>
+                                <textarea name="mother-name" class="form-control required" placeholder="Mother's Name"><?php echo $mother; ?></textarea>
+                            </div>
+
+                            <div class="col-lg-6 mb-25 is-married-col">
+                                <label for="" class="form-label">Marital Status*</label>
+                                <span id="isMarried-error" class="error">This field is required.</span>
+                                <select name="isMarried" id="isMarried" class="form-select required" required="required">
+                                    <option value="">Choose Options</option>
+                                    <option value="1" <?php echo ($married == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="2" <?php echo ($married == '2') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-1">
+                                <label for="" class="form-label">Marriage Date</label>
+                                <input type="text" autocomplete="off" name="anniversary" class="form-control anniversary required" value="<?php echo $anniversary; ?>" placeholder="dd/mm/yy" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-1">
+                                <label for="" class="form-label">Spouse Name</label>
+                                <input name="spouse-name" value="<?php echo $spouse; ?>" class="form-control" placeholder="Spouse Name" />
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-25 condition is-children-col condition-1">
+                                <label for="" class="form-label">Have children?</label>
+                                <select name="have-children" class="form-select required">
+                                    <option value="">Choose Options</option>
+                                    <option value="1" <?php echo ($child == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="2" <?php echo ($child == '2') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6 mb-25 condition condition-2">
+                                <label for="" class="form-label">First Kid's Name</label>
+                                <input name="first-kids-name" class="form-control" value="<?php echo $first_kids_name; ?>" placeholder="First Kid's Name" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-2">
+                                <label for="" class="form-label">First Kid's DOB</label>
+                                <input type="text" name="first-kids-dob" autocomplete="off" value="<?php echo $first_kids_dob; ?>" class="first-kids-dob form-control" placeholder="dd/mm/yy" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-2">
+                                <label for="" class="form-label">First Kid's Gender</label>
+                                <div class="form-radio">
+                                    <label for="male">
+                                        <input type="radio" value="male" id="male" name="first-kids-gender" class="form-check-input" <?php checked( $first_kids_gender, 'male' ); ?> /> Male
+                                    </label> &nbsp;&nbsp;
+                                    <label for="female-1">
+                                        <input type="radio" value="female" id="female-1" name="first-kids-gender" class="form-check-input" <?php checked( $first_kids_gender, 'female' ); ?> /> Female
+                                    </label>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-25 condition have_second_child conditional_child">
+                               <span>Have Second Child? <i title="Have Second Child?" class="ri-add-line"></i></span>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6 mb-25 condition condition-3">
+                                <label for="" class="form-label">Second Kid's Name</label>
+                                <input name="second-kids-name" class="form-control" value="<?php echo $second_kids_name; ?>" placeholder="Second Kid's Name" />
+                            </div>
+                            
+                            <div class="col-lg-6 mb-25 condition condition-3">
+                                <label for="" class="form-label">Second Kid's DOB</label>
+                                <input type="text" name="second-kids-dob" autocomplete="off" class="form-control second-kids-dob" value="<?php echo $second_kids_dob; ?>" placeholder="dd/mm/yy" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-3">
+                                <label for="" class="form-label">Second Kid's Gender</label>
+                                <div class="form-radio">
+                                    <label for="second-male-1">
+                                    <input type="radio" value="male" id="second-male-1" name="second-kids-gender" class="form-check-input" <?php checked( $second_kids_gender, 'male' ); ?> /> Male
+                                    </label> &nbsp;&nbsp;
+                                    <label for="second-female-2">
+                                    <input type="radio" value="female" id="second-female-2" name="second-kids-gender" class="form-check-input" <?php checked( $second_kids_gender, 'female' ); ?> /> Female
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-25 condition have_third_child conditional_child">
+                               <span>Have Third Child? <i title="Have Third Child?" class="ri-add-line"></i></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-6 mb-25 condition condition-4">
+                                <label for="" class="form-label">Third Kid's Name</label>
+                                <input name="third-kids-name" class="form-control" value="<?php echo $third_kids_name; ?>" placeholder="Third Kid's Name" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-4">
+                                <label for="" class="form-label">Third Kid's DOB</label>
+                                <input type="text" name="third-kids-dob" autocomplete="off" value="<?php echo $third_kids_dob; ?>" class="third-kids-dob form-control" placeholder="dd/mm/yy" />
+                            </div>
+
+                            <div class="col-lg-6 mb-25 condition condition-4">
+                                <label for="" class="form-label">Third Kid's Gender</label>
+                                <div class="form-radio">
+                                    <label for="third-male-1">
+                                    <input type="radio" value="male" id="third-male-1" name="third-kids-gender" class="form-check-input"  <?php checked( $third_kids_gender, 'male' ); ?>/> Male
+                                    </label> &nbsp;&nbsp;
+                                    <label for="third-female-2">
+                                    <input type="radio" value="female" id="third-female-2" name="third-kids-gender" class="form-check-input" <?php checked( $third_kids_gender, 'female' ); ?> /> Female
+                                    </label>
+                                </div>
+                            </div>                       
+
+                    </section>
                     <!-- Step 1 -->
                     <section class="mb-30">
                         <div class="row">
+
                             <!-- Full Name -->
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">Name*</label>
@@ -145,8 +271,9 @@
                             <!-- Date of Birth -->
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">Date of Birth*</label>
-                                <input name="date" type="date" class="ic_dob form-control required" value="<?php echo $date; ?>" placeholder="dd/mm/yy">
+                                <input name="text" autocomplete="off" type="text" class="ic_dob form-control required" value="<?php echo $date; ?>" placeholder="dd/mm/yy">
                             </div>
+
                             <!-- Company Name -->
                             <div class="col-lg-6 mb-25">
                                 <label for="" class="form-label">Business Name*</label>
@@ -191,124 +318,7 @@
                         box according to your interest)
                     </h5>
 
-                    <!-- TODO 3 Step 3 -->
-                    <h6></h6>
-                    <section class="mb-30">
-                        <div class="row ">
-                            <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Father's Name*</label>
-                                <textarea name="father-name" class="form-control required" placeholder="Father's Name"><?php echo $father; ?></textarea>
-                            </div>
-
-                            <div class="col-lg-6 mb-25">
-                                <label for="" class="form-label">Mother's Name*</label>
-                                <textarea name="mother-name" class="form-control required" placeholder="Mother's Name"><?php echo $mother; ?></textarea>
-                            </div>
-
-                            <div class="col-lg-6 mb-25 is-married-col">
-                                <label for="" class="form-label">Marital Status*</label>
-                                <span id="isMarried-error" class="error">This field is required.</span>
-                                <select name="isMarried" id="isMarried" class="form-select required" required="required">
-                                    <option value="">Choose Options</option>
-                                    <option value="1" <?php echo ($married == '1') ? 'selected' : ''; ?>>Yes</option>
-                                    <option value="2" <?php echo ($married == '2') ? 'selected' : ''; ?>>No</option>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-6 mb-25 condition condition-1">
-                                <label for="" class="form-label">Marriage Date</label>
-                                <input type="date" name="anniversary" class="form-control anniversary required" value="<?php echo $anniversary; ?>" placeholder="Marriage Anniversary" />
-                            </div>
-
-                            <div class="col-lg-6 mb-25 condition condition-1">
-                                <label for="" class="form-label">Spouse Name</label>
-                                <input name="spouse-name" value="<?php echo $spouse; ?>" class="form-control" placeholder="Spouse Name" />
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 mb-25 condition is-children-col condition-1">
-                                <label for="" class="form-label">Have children?</label>
-                                <select name="have-children" class="form-select required">
-                                    <option value="">Choose Options</option>
-                                    <option value="1" <?php echo ($child == '1') ? 'selected' : ''; ?>>Yes</option>
-                                    <option value="2" <?php echo ($child == '2') ? 'selected' : ''; ?>>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 mb-25 condition condition-2">
-                                <label for="" class="form-label">First Kid's Name</label>
-                                <input name="first-kids-name" class="form-control" value="<?php echo $first_kids_name; ?>" placeholder="First Kid's Name" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-2">
-                                <label for="" class="form-label">First Kid's DOB</label>
-                                <input type="date" name="first-kids-dob" value="<?php echo $first_kids_dob; ?>" class="first-kids-dob form-control" placeholder="" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-2">
-                                <label for="" class="form-label">First Kid's Gender</label>
-                                <div class="form-radio">
-                                    <label for="male">
-                                        <input type="radio" value="male" id="male" name="first-kids-gender" class="form-check-input" <?php checked( $first_kids_gender, 'male' ); ?> /> Male
-                                    </label> &nbsp;&nbsp;
-                                    <label for="female-1">
-                                        <input type="radio" value="female" id="female-1" name="first-kids-gender" class="form-check-input" <?php checked( $first_kids_gender, 'female' ); ?> /> Female
-                                    </label>
-                                    
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-25 condition have_second_child conditional_child">
-                               <span>Have Second Child? <i title="Have Second Child?" class="ri-add-line"></i></span>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-lg-6 mb-25 condition condition-3">
-                                <label for="" class="form-label">Second Kid's Name</label>
-                                <input name="second-kids-name" class="form-control" value="<?php echo $second_kids_name; ?>" placeholder="second Kid's Name" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-3">
-                                <label for="" class="form-label">Second Kid's DOB</label>
-                                <input type="date" name="second-kids-dob" class="form-control second-kids-dob" value="<?php echo $second_kids_dob; ?>" placeholder="" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-3">
-                                <label for="" class="form-label">Second Kid's Gender</label>
-                                <div class="form-radio">
-                                    <label for="second-male-1">
-                                    <input type="radio" value="male" id="second-male-1" name="second-kids-gender" class="form-check-input" <?php checked( $second_kids_gender, 'male' ); ?> /> Male
-                                    </label> &nbsp;&nbsp;
-                                    <label for="second-female-2">
-                                    <input type="radio" value="female" id="second-female-2" name="second-kids-gender" class="form-check-input" <?php checked( $second_kids_gender, 'female' ); ?> /> Female
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-25 condition have_third_child conditional_child">
-                               <span>Have Third Child? <i title="Have Third Child?" class="ri-add-line"></i></span>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-lg-6 mb-25 condition condition-4">
-                                <label for="" class="form-label">Third Kid's Name</label>
-                                <input name="third-kids-name" class="form-control" value="<?php echo $third_kids_name; ?>" placeholder="third Kid's Name" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-4">
-                                <label for="" class="form-label">Third Kid's DOB</label>
-                                <input type="date" name="third-kids-dob" value="<?php echo $third_kids_dob; ?>" class="third-kids-dob form-control" placeholder="" />
-                            </div>
-                            <div class="col-lg-6 mb-25 condition condition-4">
-                                <label for="" class="form-label">Third Kid's Gender</label>
-                                <div class="form-radio">
-                                    <label for="third-male-1">
-                                    <input type="radio" value="male" id="third-male-1" name="third-kids-gender" class="form-check-input"  <?php checked( $third_kids_gender, 'male' ); ?>/> Male
-                                    </label> &nbsp;&nbsp;
-                                    <label for="third-female-2">
-                                    <input type="radio" value="female" id="third-female-2" name="third-kids-gender" class="form-check-input" <?php checked( $third_kids_gender, 'female' ); ?> /> Female
-                                    </label>
-                                </div>
-                            </div>                       
-
-                    </section>
+                    <!-- TODO: 1 -->
                     <!-- Step 4 -->
                     <h6></h6>
                     <section class="mb-30">
@@ -330,16 +340,16 @@
 
 
                             <div class="ic-file-upload-item">
-                                <h6 class="cl-pm fw-500 mb-15">Applicant's photo</h6>
+                                <h6 class="cl-pm fw-500 mb-15">Applicant's photo*</h6>
                                 <input type="file" name="photo" accept="image/png, image/gif, image/jpeg, image/jpg" class="required">
                             </div>
 
                             <div class="ic-file-upload-item">
-                                <h6 class="cl-pm fw-500 mb-15">NID</h6>
+                                <h6 class="cl-pm fw-500 mb-15">NID*</h6>
                                 <input type="file" name="nid" accept="image/png, image/gif, image/jpeg, image/jpg" class="required">
                             </div>
                             <div class="ic-file-upload-item">
-                                <h6 class="cl-pm fw-500 mb-15">Trade License</h6>
+                                <h6 class="cl-pm fw-500 mb-15">Trade License*</h6>
                                 <input type="file" name="trade" accept="image/png, image/gif, image/jpeg, image/jpg" class="required">
                             </div>
                             <div class="ic-file-upload-item">
