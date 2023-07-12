@@ -79,7 +79,7 @@
                                 <label for="" class="form-label">Marital Status*</label>
                                 <span id="isMarried-error" class="error">This field is required.</span>
                                 <select name="isMarried" id="isMarried" class="form-select required" required="required">
-                                    <option value="">Choose Options</option>
+                                    <option value="">Select Options</option>
                                     <option value="1" <?php echo ($married == '1') ? 'selected' : ''; ?>>Yes</option>
                                     <option value="2" <?php echo ($married == '2') ? 'selected' : ''; ?>>No</option>
                                 </select>
@@ -96,18 +96,18 @@
                             </div>
 
                         </div>
-                        <div class="row">
+                        <div class="row first-child-select-row">
                             <div class="col-lg-6 mb-25 condition is-children-col condition-1">
                                 <label for="" class="form-label">Have children?</label>
                                 <select name="have-children" class="form-select required">
-                                    <option value="">Choose Options</option>
+                                    <option value="">Select Options</option>
                                     <option value="1" <?php echo ($child == '1') ? 'selected' : ''; ?>>Yes</option>
                                     <option value="2" <?php echo ($child == '2') ? 'selected' : ''; ?>>No</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
 
+                        <div class="row first-child-row">
                             <div class="col-lg-6 mb-25 condition condition-2">
                                 <label for="" class="form-label">First Kid's Name</label>
                                 <input name="first-kids-name" class="form-control" value="<?php echo $first_kids_name; ?>" placeholder="First Kid's Name" />
@@ -127,14 +127,22 @@
                                     <label for="female-1">
                                         <input type="radio" value="female" id="female-1" name="first-kids-gender" class="form-check-input" <?php checked( $first_kids_gender, 'female' ); ?> /> Female
                                     </label>
-                                    
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-25 condition have_second_child conditional_child">
-                               <span>Have Second Child? <i title="Have Second Child?" class="ri-add-line"></i></span>
+                        </div>
+                        
+                        <div class="row second-child-select-row">
+                            <div class="col-lg-6 mb-25 condition condition-3 have_second_child conditional_child">
+                               <!-- <span>Have Second Child? <i title="Have Second Child?" class="ri-add-line"></i></span> -->
+                               <label for="" class="form-label">Have Second Children?</label>
+                                <select name="have-second-children" class="form-select required">
+                                    <option value="">Select Options</option>
+                                    <option value="1" <?php echo ($child == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="2" <?php echo ($child == '2') ? 'selected' : ''; ?>>No</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row second-child-row">
 
                             <div class="col-lg-6 mb-25 condition condition-3">
                                 <label for="" class="form-label">Second Kid's Name</label>
@@ -157,12 +165,21 @@
                                     </label>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row third-child-select-row">
                             <div class="col-lg-6 mb-25 condition have_third_child conditional_child">
-                               <span>Have Third Child? <i title="Have Third Child?" class="ri-add-line"></i></span>
+                               <!-- <span>Have Third Child? <i title="Have Third Child?" class="ri-add-line"></i></span> -->
+                               <label for="" class="form-label">Have Third Children?</label>
+                                <select name="have-third-children" class="form-select required">
+                                    <option value="">Select Options</option>
+                                    <option value="1" <?php echo ($child == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="2" <?php echo ($child == '2') ? 'selected' : ''; ?>>No</option>
+                                </select>
                             </div>
                         </div>
-                        
-                        <div class="row">
+
+                        <div class="row third-child-row">
                             <div class="col-lg-6 mb-25 condition condition-4">
                                 <label for="" class="form-label">Third Kid's Name</label>
                                 <input name="third-kids-name" class="form-control" value="<?php echo $third_kids_name; ?>" placeholder="Third Kid's Name" />
@@ -183,7 +200,8 @@
                                     <input type="radio" value="female" id="third-female-2" name="third-kids-gender" class="form-check-input" <?php checked( $third_kids_gender, 'female' ); ?> /> Female
                                     </label>
                                 </div>
-                            </div>                       
+                            </div>
+                        </div>
 
                     </section>
                     <!-- Step 1 -->
