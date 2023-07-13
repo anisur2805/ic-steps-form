@@ -176,142 +176,84 @@ $("body").on(
     }
 })()
 
-// $(document).on("change", 'select[name="isMarried"]', function () {
-//     var selectedValue = $(this).val()
-//     if (selectedValue === "1") {
-//         $(".condition-1").show()
-//         $(".first-child-select-row").show()
-//     } else {
-//         $(".condition-1").hide()
-//         $(".first-child-row").hide()
-//         $(".second-child-row").hide()
-//         $(".third-child-row").hide()
-
-//         $(".first-child-select-row").hide()
-//         $(".second-child-select-row").hide()
-//         $(".third-child-select-row").hide()
-//     }
-// })
+jQuery(document).ready(function () {
+    icHandleMarriedStatus();
+    icHandleHaveChild();
+    icHandleSecondChild();
+    icHandleThirdChild();
+});
 
 // For Step 1 
 function icHandleMarriedStatus() {
-    if (jQuery('#isMarried').val() === '1') {
-
-        jQuery(".condition-1").show();
-        jQuery(".first-child-select-row").show();
-
+    let isMarriedValue = jQuery('#isMarried').val();
+  
+    if (isMarriedValue === '1') {
+      jQuery(".condition-1, .first-child-select-row").show();
     } else {
-
-        jQuery('select[name="have-children"]').val('');
-        jQuery('.have_second_child select').val('');
-        jQuery('.have_third_child select').val('');
-
-        jQuery(".condition-1").hide()
-        jQuery(".condition-2").hide()
-        jQuery(".condition-3").hide()
-        jQuery(".condition-4").hide()
-
-        jQuery('.have_second_child').hide();
-        jQuery('.have_third_child').hide();
-        // jQuery(".first-child-row").hide()
-        // jQuery(".second-child-row").hide()
-        // jQuery(".third-child-row").hide()
-
-        // jQuery(".first-child-select-row").hide()
-        // jQuery(".second-child-select-row").hide()
-        // jQuery(".third-child-select-row").hide() 
-
-        
+      jQuery('select[name="have-children"]').val('');
+      jQuery('.have_second_child select, .have_third_child select').val('');
+      
+      jQuery(".condition-1, .condition-2, .condition-3, .condition-4").hide();
+      jQuery('.have_second_child, .have_third_child').hide();
     }
-}
-jQuery(document).ready(function () {
-    icHandleMarriedStatus();
-});
-jQuery('#isMarried').on('change', function (e) {
-    e.preventDefault();
-    icHandleMarriedStatus();
-
-    icHandleHaveChild();
-});
+  }
+  
 
 // Step 2
 function icHandleHaveChild() {
-    if (jQuery('select[name="have-children"]').val() === '1') {
-        jQuery(".condition-2").show()
-        // jQuery(".have_second_child").show()
-        // jQuery(".first-child-row").show()
-        // jQuery(".second-child-select-row").show()
+    let haveSecondChild = jQuery('select[name="have-children"]').val();
+    if( haveSecondChild == 1 ) {
         jQuery(".have_second_child").show();
-        // console.log( 'condition 3' )
-
-        console.log( 'im here' )
+        jQuery(".condition-2").show();
     } else {
-        jQuery(".condition-2").hide()
-        jQuery(".condition-3").hide()
-        jQuery(".have_second_child").hide()
+        jQuery(".condition-2, .condition-3, .have_second_child").hide()
+        jQuery('.have_second_child select, .have_third_child select').val('');
 
-        jQuery('.have_second_child select').val('');
-        jQuery('.have_third_child select').val('');
-
-        // jQuery(".conditional_child").hide()
-        // jQuery(".condition-4").hide()
     }
-}
-jQuery(document).ready(function () {
-    icHandleHaveChild();
-});
-jQuery(document).on('change', 'select[name="have-children"]', function (e) {
-    e.preventDefault();
-    icHandleHaveChild();
 
-    icHandleSecondChild();
-});
+}
 
 // Step 3
 function icHandleSecondChild() {
-    if (jQuery('.have_second_child select').val() === '1') {
-        jQuery(".condition-3").show()
-        jQuery(".condition-4").show()
-        jQuery(".have_third_child").show()
-        console.log( 'second' )
+    let haveSecondChild = jQuery('.have_second_child select').val();
+
+    if ( haveSecondChild === '1') {
+        jQuery(".condition-3, .condition-4, .have_third_child").show()
     } else {
-        jQuery(".condition-3").hide()
-        jQuery(".condition-4").hide()
-        jQuery(".have_third_child").hide();
-        console.log( 'second else' )
-        
+        jQuery(".condition-3, .condition-4, .have_third_child").hide();
         jQuery('.have_third_child select').val('');
-        // jQuery(".second-child-select-row").hide()
-        
 
     }
-}
-jQuery(document).ready(function () {
-    icHandleSecondChild();
-});
-jQuery(document).on('change', '.have_second_child select', function (e) {
-    e.preventDefault();
-    icHandleSecondChild();
 
-    icHandleThirdChild();
-});
+}
 
 // Step 4
 function icHandleThirdChild() {
-    if (jQuery('.have_third_child select').val() === '1') {
+    let haveThirdChild = jQuery('.have_third_child select').val();
+    if ( haveThirdChild === '1') {
         jQuery(".condition-4").show()
-        // jQuery(".have_third_child").show()
-        // jQuery(".second-child-select-row").show()
-        console.log( 'third' )
     } else {
         jQuery(".condition-4").hide()
-        // jQuery(".have_third_child").hide()
-        console.log( 'third else' )
-        // jQuery(".second-child-select-row").hide()
     }
 }
-jQuery(document).ready(function () {
+
+jQuery('#isMarried').on('change', function (e) {
+    e.preventDefault();
+    icHandleMarriedStatus();
+    icHandleHaveChild();
+});
+
+jQuery(document).on('change', 'select[name="have-children"]', function (e) {
+    e.preventDefault();
+    icHandleHaveChild();
+    icHandleSecondChild();
+});
+
+jQuery(document).on('change', '.have_second_child select', function (e) {
+    e.preventDefault();
+    icHandleSecondChild();
     icHandleThirdChild();
+
 });
 
 jQuery(document).on('change', '.have_third_child select', function (e) {
