@@ -713,3 +713,12 @@ ul.ic-user-dropdown li:first-child {
 #ui-datepicker-div {
     z-index: 11 !important;
 }
+
+header.ic-header-area.sticky + main#primary {
+    margin-top: 120px;
+}
+
+.woocommerce-account main#primary {
+    max-width: 1100px;
+    margin: 0 auto;
+}

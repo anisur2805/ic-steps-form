@@ -74,7 +74,7 @@ class Subscribers_List_Table extends \WP_List_Table {
 
         $this->_column_headers = [$column, $hidden, $sortable, $primary];
 
-        $per_page     = 2;
+        $per_page     = 20;
         $current_page = $this->get_pagenum();
         $offset       = ( $current_page - 1 ) * $per_page;
 
