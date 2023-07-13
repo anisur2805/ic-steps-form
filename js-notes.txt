@@ -1,0 +1,50 @@
+
+
+
+
+
+
+
+/*
+$('select[name="have-children"]').on("change", function () {
+    var selectedValue = $(this).val()
+    if (selectedValue === "1") {
+        $(".condition-2").show()
+        $(".have_second_child").show()
+        $(".first-child-row").show()
+        $(".second-child-select-row").show()
+    } else {
+        $(".condition-2").hide()
+        $(".have_second_child").hide()
+        $(".conditional_child").hide()
+        $(".condition-3").hide()
+        $(".condition-4").hide()
+    }
+})
+
+$(document).on("change", ".have_second_child select", function () {
+    var selectedValue = $(this).val()
+    if (selectedValue === "1") {
+        $(".condition-3").show()
+        $(".have_third_child").show()
+        $(".second-child-select-row").show()
+    } else {
+        $(".condition-3").hide()
+        $(".have_third_child").hide()
+        $(".second-child-select-row").hide()
+    }
+})
+
+$(".have_third_child select").on("change", function () {
+    var selectedValue = $(this).val()
+    if (selectedValue === "1") {
+        $(".condition-4").show()
+        $(".have_second_child").show()
+        $(".second-child-row").show()
+    } else {
+        $(".condition-4").hide();
+        // $(".have_second_child").hide()
+        // $(".second-child-row").hide()
+    }
+})
+*/

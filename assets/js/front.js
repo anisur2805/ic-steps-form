@@ -196,15 +196,26 @@ $("body").on(
 // For Step 1 
 function icHandleMarriedStatus() {
     if (jQuery('#isMarried').val() === '1') {
+
         jQuery(".condition-1").show();
         jQuery(".first-child-select-row").show();
 
     } else {
+
+        jQuery('select[name="have-children"]').val('');
+        jQuery('.have_second_child select').val('');
+        jQuery('.have_third_child select').val('');
+
         jQuery(".condition-1").hide()
         jQuery(".condition-2").hide()
+        jQuery(".condition-3").hide()
+        jQuery(".condition-4").hide()
+
+        jQuery('.have_second_child').hide();
+        jQuery('.have_third_child').hide();
         // jQuery(".first-child-row").hide()
-        jQuery(".second-child-row").hide()
-        jQuery(".third-child-row").hide()
+        // jQuery(".second-child-row").hide()
+        // jQuery(".third-child-row").hide()
 
         // jQuery(".first-child-select-row").hide()
         // jQuery(".second-child-select-row").hide()
@@ -230,11 +241,19 @@ function icHandleHaveChild() {
         // jQuery(".have_second_child").show()
         // jQuery(".first-child-row").show()
         // jQuery(".second-child-select-row").show()
+        jQuery(".have_second_child").show();
+        // console.log( 'condition 3' )
+
+        console.log( 'im here' )
     } else {
         jQuery(".condition-2").hide()
-        // jQuery(".have_second_child").hide()
-        // jQuery(".conditional_child").hide()
         jQuery(".condition-3").hide()
+        jQuery(".have_second_child").hide()
+
+        jQuery('.have_second_child select').val('');
+        jQuery('.have_third_child select').val('');
+
+        // jQuery(".conditional_child").hide()
         // jQuery(".condition-4").hide()
     }
 }
@@ -244,94 +263,58 @@ jQuery(document).ready(function () {
 jQuery(document).on('change', 'select[name="have-children"]', function (e) {
     e.preventDefault();
     icHandleHaveChild();
+
+    icHandleSecondChild();
 });
 
 // Step 3
-// function icHandleSecondChild() {
-//     if (jQuery('.have_second_child select').val() === '1') {
-//         jQuery(".condition-3").show()
-//         jQuery(".have_third_child").show()
-//         jQuery(".second-child-select-row").show()
-//     } else {
-//         jQuery(".condition-3").hide()
-//         jQuery(".have_third_child").hide()
-//         // jQuery(".second-child-select-row").hide()
-//     }
-// }
-// jQuery(document).ready(function () {
-//     icHandleSecondChild();
-// });
-// jQuery(document).on('change', '.have_second_child select', function (e) {
-//     e.preventDefault();
-//     icHandleSecondChild();
-// });
+function icHandleSecondChild() {
+    if (jQuery('.have_second_child select').val() === '1') {
+        jQuery(".condition-3").show()
+        jQuery(".condition-4").show()
+        jQuery(".have_third_child").show()
+        console.log( 'second' )
+    } else {
+        jQuery(".condition-3").hide()
+        jQuery(".condition-4").hide()
+        jQuery(".have_third_child").hide();
+        console.log( 'second else' )
+        
+        jQuery('.have_third_child select').val('');
+        // jQuery(".second-child-select-row").hide()
+        
+
+    }
+}
+jQuery(document).ready(function () {
+    icHandleSecondChild();
+});
+jQuery(document).on('change', '.have_second_child select', function (e) {
+    e.preventDefault();
+    icHandleSecondChild();
+
+    icHandleThirdChild();
+});
 
 // Step 4
-// function icHandleThirdChild() {
-//     if (jQuery('.have_third_child select').val() === '1') {
-//         jQuery(".condition-4").show()
-//         jQuery(".have_third_child").show()
-//         jQuery(".second-child-select-row").show()
-//     } else {
-//         jQuery(".condition-4").hide()
-//         jQuery(".have_third_child").hide()
-//         jQuery(".second-child-select-row").hide()
-//     }
-// }
-// jQuery(document).ready(function () {
-//     icHandleThirdChild();
-// });
-// jQuery(document).on('change', '.have_third_child select', function (e) {
-//     e.preventDefault();
-//     icHandleThirdChild();
-// });
-
-
-
-
-
-
-
-/*
-$('select[name="have-children"]').on("change", function () {
-    var selectedValue = $(this).val()
-    if (selectedValue === "1") {
-        $(".condition-2").show()
-        $(".have_second_child").show()
-        $(".first-child-row").show()
-        $(".second-child-select-row").show()
+function icHandleThirdChild() {
+    if (jQuery('.have_third_child select').val() === '1') {
+        jQuery(".condition-4").show()
+        // jQuery(".have_third_child").show()
+        // jQuery(".second-child-select-row").show()
+        console.log( 'third' )
     } else {
-        $(".condition-2").hide()
-        $(".have_second_child").hide()
-        $(".conditional_child").hide()
-        $(".condition-3").hide()
-        $(".condition-4").hide()
+        jQuery(".condition-4").hide()
+        // jQuery(".have_third_child").hide()
+        console.log( 'third else' )
+        // jQuery(".second-child-select-row").hide()
     }
-})
+}
+jQuery(document).ready(function () {
+    icHandleThirdChild();
+});
 
-$(document).on("change", ".have_second_child select", function () {
-    var selectedValue = $(this).val()
-    if (selectedValue === "1") {
-        $(".condition-3").show()
-        $(".have_third_child").show()
-        $(".second-child-select-row").show()
-    } else {
-        $(".condition-3").hide()
-        $(".have_third_child").hide()
-        $(".second-child-select-row").hide()
-    }
-})
-
-$(".have_third_child select").on("change", function () {
-    var selectedValue = $(this).val()
-    if (selectedValue === "1") {
-        $(".condition-4").show()
-        $(".have_second_child").show()
-        $(".second-child-row").show()
-    } else {
-        $(".condition-4").hide();
-        // $(".have_second_child").hide()
-        // $(".second-child-row").hide()
-    }
-})
-*/
+jQuery(document).on('change', '.have_third_child select', function (e) {
+    e.preventDefault();
+    icHandleThirdChild();
+});

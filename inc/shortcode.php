@@ -132,7 +132,7 @@
                         </div>
                         
                         <div class="row second-child-select-row">
-                            <div class="col-lg-6 mb-25 condition condition-3 have_second_child conditional_child">
+                            <div class="col-lg-6 mb-25 condition have_second_child conditional_child">
                                <!-- <span>Have Second Child? <i title="Have Second Child?" class="ri-add-line"></i></span> -->
                                <label for="" class="form-label">Have Second Children?</label>
                                 <select name="have-second-children" class="form-select required">
